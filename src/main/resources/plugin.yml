@@ -1,0 +1,8 @@
+name: DEventos
+version: 4.0
+author: Dery
+main: me.dery.deventos.DEventos
+
+commands:
+    evento:
+    eventos:

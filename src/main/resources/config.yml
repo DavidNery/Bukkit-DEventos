@@ -1,0 +1,441 @@
+#Configuracao:
+Config:
+  #Auto Start:
+  Auto_Start:
+    #Ativar:
+    Ativar: true
+    #Eventos:
+    #Formato:
+    #evento->[dia1>hora:minuto[;hora:minuto;hora:minuto][&dia2>hora:minuto[;hora:minuto;hora:minuto]]]
+    #evento->hora:min[;hora:min;hora:min]
+    Eventos:
+    - "parkour->segunda>11:00&terca>12:00&quarta>13:00&quinta>14:00&sexta>15:00&domingo>8:00;13:30;18:00"
+    - "corrida->15:30"
+    - "astronauta->16:00"
+  #MySQL:
+  MySQL:
+    #Usar MYSQL:
+    Use: false
+    #Usuario do MySQL:
+    Usuario: "user"
+    #Senha do MySQL:
+    Senha: "pass"
+    #DB do MySQL:
+    DB: "DEventos"
+    #Host do MySQL:
+    Host: "localhost"
+    #Avisar quando atualizar a database (CONSOLE):
+    DEBUG_Console: true
+  #Permitir o player entrar no evento utilizando apenas /evento ou /evento entrar:
+  Evento_Entra: true
+  #Baus dos eventos:
+  Baus:
+    #Items padroes:
+    #Obs: Os enchants sao unsafe, ou seja, podem passar do normal!
+    Itens_Padroes:
+    - "item:276 qnt:1 enchants:afiada:1 nome:&6&lEspada_Mother_Fucker lore:&eMate_com_facilidade!@&aSelo_de_qualidade_Dery! chance:25"
+    - "item:310 qnt:1 enchants:protecao:1,inquebravel:1 &2&lElmo_Fodinha lore:&eMais_seguranca!@&9Selo_de_qualidade_Dery! chance:25"
+    - "item:311 qnt:1 enchants:protecao:1,inquebravel:1 &2&lPeitoral_Fodinha lore:&eMais_seguranca!@&9Selo_de_qualidade_Dery! chance:25"
+    - "item:312 qnt:1 enchants:protecao:1,inquebravel:1 &2&lCalca_Fodinha lore:&eMais_seguranca!@&9Selo_de_qualidade_Dery! chance:25"
+    - "item:313 qnt:1 enchants:protecao:1,inquebravel:1 &2&lBota_Fodinha lore:&eMais_seguranca!@&9Selo_de_qualidade_Dery! chance:25"
+    - "item:322:1 qnt:1 nome:&6Cap_Para_Matar_Tranquilo lore:&eVarios_efeitos_em_um_item! chance:25"
+    - "pocao:forca qnt:1 duracao:60 amplificador:2 splash:true chance:50"
+    - "pocao:velocidade qnt:1 duracao:60 amplificador:2 splash:true chance:50"
+  #Usar SipleClans (clans):
+  Use_SimpleClans: true
+  #Usar LegendChat (tag):
+  Use_LegendChat: true
+  #Permitir iniciar mais de um evento por vez:
+  Permitir_Mais_De_Um_Evento: true
+  #Bloquear o player de teleportar quando estiver em um evento?
+  Desativar_Teleporte: true
+  #Configuracoes do rank:
+  Rank:
+    #De quanto em em quanto o rank será atualizado:
+    #Em MINUTOS!
+    Tempo_Atualizar_Dados: 5
+    #Quantidade de players que serao mostrados ao usar /evento topvitorias:
+    Vitorias_Quantidade: 10
+    #Quantidade de players que serao mostrados ao usar /evento topderrotas:
+    Derrotas_Quantidade: 10
+    #Quantidade de players que serao mostrados ao usar /evento topparticipacoes:
+    Participacoes_Quantidade: 5
+    #Título do rank de top vencedores:
+    TOP_Vitorias_Titulo: "&6&l========== &f&lTOP VITORIAS &6&l=========="
+    #Formato do rank de top vencedores:
+    TOP_Vitorias_Format: "&7#{posicao} &f- &7{player} &f- &7{vitorias}"
+    #Fechamento do rank de top vencedores:
+    TOP_Vitorias_Fechamento: "&6&lNOTA: &fO rank foi atualizado pela ultima vez em &6&l{ultimaatualizacao}&f!"
+    #Título do rank de top perdedores:
+    TOP_Derrotas_Titulo: "&6&l========== &f&lTOP DERROTAS &6&l=========="
+    #Formato do rank de top perdedores:
+    TOP_Derrotas_Format: "&7#{posicao} &f- &7{player} &f- &7{derrotas}"
+    #Fechamento do rank de top perdedores:
+    TOP_Derrotas_Fechamento: "&6&lNOTA: &fO rank foi atualizado pela ultima vez em &6&l{ultimaatualizacao}&f!"
+    #Título do rank de top participadores:
+    TOP_Participacoes_Titulo: "&6&l========== &f&lTOP PARTICIPACOES &6&l=========="
+    #Formato do rank de top participadores:
+    TOP_Participacoes_Format: "&7#{posicao} &f- &7{player} &f- &7{participacoes}"
+    #Fechamento do rank de top participadores:
+    TOP_Participacoes_Fechamento: "&6&lNOTA: &fO rank foi atualizado pela ultima vez em &6&l{ultimaatualizacao}&f!"
+  
+#Mensagens:
+Mensagem:
+  #Comando extra do plugin.
+  #Informe ao player os eventos que existem em seu servidor e em que hora eles iniciam:
+  Eventos:
+  - "&7Lista de Eventos + Horario"
+  - "&cParkour &f&l- &315:00"
+  - "&cCorrida &f&l- &315:30"
+  - "&cAstronauta &f&l- &316:00"
+  #Comandos que o player tem acesso:
+  Comandos_Player:
+  - "&7Comandos que voce tem acesso:"
+  - "&6/evento entrar [evento] &f&l* &eEntre em algum evento!"
+  - "&6/evento sair &f&l* &eSaia do evento que voce esta participando!"
+  - "&6/evento espectar [evento] &f&l* &eEntre no modo espectador de algum evento!"
+  - "&6/evento topvitorias &f&l* &eVeja quem mais venceu os eventos!"
+  - "&6/evento topderrotas &f&l* &eVeja quem mais perdeu os eventos!"
+  - "&6/evento topparticipacoes &f&l* &eVeja quem mais participou dos eventos!"
+  - "&6/evento recuperar &f&l* &eRecupere seus itens salvos de eventos anteriores!"
+  - "&6/eventos &f&l* &eVeja a lista de eventos do servidor!"
+  #Comandos que o staff tem acesso:
+  Comandos_Staff:
+  - "&6/evento iniciar <evento> &f&l* &eInicie algum evento!"
+  - "&6/evento parar <evento> &f&l* &ePare algum evento!"
+  - "&6/evento reload &f&l* &eRecarregue os arquivos do plugin!"
+  - "&6/evento info <evento> &f&l* &eVeja informações sobre um evento!"
+  - "&6/evento setspawn <evento> &f&l* &eSete o spawn de algum evento!"
+  - "&6/evento setlobby <evento> &f&l* &eSete o lobby de algum evento!"
+  - "&6/evento setativarlobby <evento> <true/false> &f&l* &eDefina se o lobby do evento está ativado!"
+  - "&6/evento setexit <evento> &f&l* &eSete a saida de algum evento!"
+  - "&6/evento setespectador <evento> &f&l* &eSete o local onde os espectadores irão nascer!"
+  - "&6/evento setativarespectador <evento> <true/false>&f&l* &eDefina se o modo espectador pode ser usado!"
+  - "&6/evento setchest <evento> &f&l* &eSete um local de algum bau de um evento!"
+  - "&6/evento delchest <evento> <bau> &f&l* &eDelete algum bau de um evento!"
+  - "&6/evento setpremio <evento> <premio> &f&l* &eSete o premio de algum evento!"
+  - "&6/evento setminplayers <evento> <quantidade> &f&l* &eSete o minimo de players necessarios de algum evento!"
+  - "&6/evento setmaxplayers <evento> <quantidade> &f&l* &eSete a quantidade maxima de players parar um evento!"
+  - "&6/evento setbypassmax <evento> <true/false> &f&l* &eAtive/desative o bypass ao evento estar cheio!"
+  - "&6/evento setultimovivoganha <evento> <true/false> &f&l* &eO último vivo ganha ou não?"
+  - "&6/evento setultimoeventoganha <evento> <true/false> &f&l* &eO último player do evento ganha ou não?"
+  - "&6/evento setanuncios <evento> <quantidade> &f&l* &eSete a quantidade de anuncios de algum evento!"
+  - "&6/evento settempoanuncios <evento> <tempo> &f&l* &eSete o tempo entre cada anuncio de algum evento!"
+  - "&6/evento settempoacabarevento <evento> <tempo> &f&l* &eSete o tempo para o evento acabar (minutos)!"
+  - "&6/evento settag <evento> <tag> &f&l* &eDefina a tag de algum evento!"
+  - "&6/evento setsalvarinv <evento> <true/false> &f&l* &eDefina se os inventários dos players serão salvos ao entrar no evento!"
+  - "&6/evento setdesativarpvp <evento> <true/false> &f&l* &eDesativar PVP durante o evento?"
+  - "&6/evento setdesativardamage <evento> <true/false> &f&l* &eDesativar damage durante o evento?"
+  - "&6/evento setdesativarfome <evento> <true/false> &f&l* &eDesativar fome durante o evento?"
+  - "&6/evento setdesativarff <evento> <true/false> &f&l* &eDesativar FF durante o evento?"
+  - "&6/evento ban <player> <evento> &f&l* &eProiba um player de entrar em um evento!"
+  - "&6/evento unban <player> <evento> &f&l* &ePermita que um player entre em um evento novamente!"
+  #Comandos que o console tem acesso:
+  Comandos_Console:
+  - "&7Comandos que voce tem acesso:"
+  - "&6/evento iniciar <evento> &f&l* &eInicie algum evento!"
+  - "&6/evento parar <evento> &f&l* &ePare algum evento!"
+  - "&6/evento reload &f&l* &eRecarregue os arquivos do plugin!"
+  - "&6/evento info <evento> &f&l* &eVeja informações sobre um evento!"
+  - "&6/evento setativarlobby <evento> <true/false> &f&l* &eDefina se o lobby do evento está ativado!"
+  - "&6/evento setativarespectador <evento> <true/false>&f&l* &eDefina se o modo espectador pode ser usado!"
+  - "&6/evento delchest <evento> <bau> &f&l* &eDelete algum bau de um evento!"
+  - "&6/evento setpremio <evento> <premio> &f&l* &eSete o premio de algum evento!"
+  - "&6/evento setminplayers <evento> <quantidade> &f&l* &eSete o minimo de players necessarios de algum evento!"
+  - "&6/evento setmaxplayers <evento> <quantidade> &f&l* &eSete a quantidade maxima de players parar um evento!"
+  - "&6/evento setbypassmax <evento> <true/false> &f&l* &eAtive/desative o bypass ao evento estar cheio!"
+  - "&6/evento setultimovivoganha <evento> <true/false> &f&l* &eO último vivo ganha ou não?"
+  - "&6/evento setultimoeventoganha <evento> <true/false> &f&l* &eO último player do evento ganha ou não?"
+  - "&6/evento setanuncios <evento> <quantidade> &f&l* &eSete a quantidade de anuncios de algum evento!"
+  - "&6/evento settempoanuncios <evento> <tempo> &f&l* &eSete o tempo entre cada anuncio de algum evento!"
+  - "&6/evento settempoacabarevento <evento> <tempo> &f&l* &eSete o tempo para o evento acabar (minutos)!"
+  - "&6/evento settag <evento> <tag> &f&l* &eDefina a tag de algum evento!"
+  - "&6/evento setsalvarinv <evento> <true/false> &f&l* &eDefina se os inventários dos players serão salvos ao entrar no evento!"
+  - "&6/evento setdesativarpvp <evento> <true/false> &f&l* &eDesativar PVP durante o evento?"
+  - "&6/evento setdesativardamage <evento> <true/false> &f&l* &eDesativar damage durante o evento?"
+  - "&6/evento setdesativarfome <evento> <true/false> &f&l* &eDesativar fome durante o evento?"
+  - "&6/evento setdesativarff <evento> <true/false> &f&l* &eDesativar FF durante o evento?"
+  - "&6/evento ban <player> <evento> &f&l* &eProiba um player de entrar em um evento!"
+  - "&6/evento unban <player> <evento> &f&l* &ePermita que um player entre em um evento novamente!"
+  - "&6/eventos &f&l* &eVeja a lista de eventos do servidor!"
+  #Player desconectou no evento:
+  Player_Desconectou: "&c&lDEventos &7Player &c&l{player} &7desconectou e foi eliminado do evento!"
+  #Player morreu no evento
+  Player_Morreu: "&c&lDEventos &7Player &c&l{player} &7morreu e foi eliminado do evento!"
+  #Mensagens de erro:
+  Erro:
+    #Caso o player nao tenha permissao para executar um comando:
+    Sem_Permissao: "&c&lDEventos &7Você não tem permissão para utilizar o comando &c&l/evento {1}&7!"
+    #Caso o player nao tenha permissao para entrar em um evento:
+    Sem_Permissao_Entrar: "&c&lDEventos &7Você não pode entrar no evento &c&l{evento}&7!"
+    #Caso o player não tenha permissão de sair de um evento:
+    Sem_Permissao_Sair: "&c&lDEventos &7Você não tem permissão para sair de um evento!"
+    #Caso o player não tenha permissão de espectar um evento:
+    Sem_Permissao_Espectar: "&c&lDEventos &7Você não tem permissão para espectar esse evento!"
+    #Caso o player utilize o comando setspawn incorretamente:
+    SetSpawn: "&6&lDEventos &7Utilize &c/evento setspawn <evento>&7!"
+    #Caso o player utilize o comando setlobby incorretamente:
+    SetLobby: "&6&lDEventos &7Utilize &c/evento setlobby <evento>&7!"
+    #Caso o player utilize o comando setexit incorretamente:
+    SetExit: "&6&lDEventos &7Utilize &c/evento setexit <evento>&7!"
+    #Caso o player utilize o comando setespectador incorretamente:
+    SetEspectador: "&6&lDEventos &7Utilize &c/evento setespectador <evento>&7!"
+    #Caso o player utilize o comando setchest incorretamente:
+    SetChestLocation: "&6&lDEventos &7Utilize &c/evento setchest <evento>&7!"
+    #Caso o player utilize o comando delchest incorretamente:
+    DelChestLocation: "&6&lDEventos &7Utilize &7/evento delchest <evento> <bau>&7!"
+    #Caso o player utilize o comando setpremio incorretamente:
+    SetPremio: "&6&lDEventos &7Utilize &c/evento setpremio <evento> <premio>&7!"
+    #Caso o player utilize o comando setminplayers incorretamente:
+    SetMinPlayers: "&6&lDEventos &7Utilize &c/evento setminplayers <evento> <quantidade>&7!"
+    #Caso o player utilize o comando setmaxplayers incorretamente:
+    SetMaxPlayers: "&6&lDEventos &7Utilize &c/evento setmaxplayers <evento> <quantidade>&7!"
+    #Caso o player utilize o comando setanuncios incorretamente:
+    SetAnuncios: "&6&lDEventos &7Utilize &c/evento setanuncios <evento> <quantidade>&7!"
+    #Caso o player utilize o comando settempoanuncios incorretamente:
+    SetTempoAnuncios: "&6&lDEventos &7Utilize &c/evento settempoanuncios <evento> <tempo (segundos)>&7!"
+    #Caso o player utilize o comando settempoacabarevento incorretamente:
+    SetTempoAcabarEvento: "&6&lDEventos &7Utilize &c/evento settempoacabarevento <evento> <tempo (minutos)>&7!"
+    #Caso o player utilize o comando settag incorretamente:
+    SetTag: "&6&lDEventos &7Utilize &c/evento settag <evento> <tag>&7!"
+    #Caso o player utilize o comando setbypassmax incorretamente:
+    SetByPassMax: "&6&lDEventos &7Utilize &c/evento setbypassmax <evento> <true/false>&7!"
+    #Caso o player utilize o comando setsalvarinv incorretamente:
+    SetSalvarInv: "&6&lDEventos &7Utilize &c/evento setsalvarinv <evento> <true/false>&7!"
+    #Caso o player utilize o comando setativarespectador incorretamente:
+    SetAtivarEspectador: "&6&lDEventos &7Utilize &c/evento setativarespectador <evento> <true/false>&7!"
+    #Caso o player utilize o comando setativarlobby incorretamente:
+    SetAtivarLobby: "&6&lDEventos &7Utilize &c/evento setativarlobby <evento> <true/false>&7!"
+    #Caso o player utilize o comando setdesativarpvp incorretamente:
+    SetDesativarPVP: "&6&lDEventos &7Utilize &c/evento setdesativarpvp <evento> <true/false>&7!"
+    #Caso o player utilize o comando setdesativardamage incorretamente:
+    SetDesativarDamage: "&6&lDEventos &7Utilize &c/evento setdesativardamage <evento> <true/false>&7!"
+    #Caso o player utilize o comando setdesativarfome incorretamente:
+    SetDesativarFome: "&6&lDEventos &7Utilize &c/evento setdesativarfome <evento> <true/false>&7!"
+    #Caso o player utilize o comando setdesativarff incorretamente:
+    SetDesativarFF: "&6&lDEventos &7Utilize &c/evento setdesativarff <evento> <true/false>&7!"
+    #Caso o staff utilize o comando setultimovivoganha incorretamente:
+    SetUltimoVivoGanha: "&6&lDEventos &7Utilize &c/evento setultimovivoganha <evento> <true/false>&7!"
+    #Caso o staff utilize o comando setultimovivoganha incorretamente:
+    SetUltimoEventoGanha: "&6&lDEventos &7Utilize &c/evento setultimoeventoganha <evento> <true/false>&7!"
+    #Caso o player utilize o comando ban incorretamente:
+    Ban: "&6&lDEventos &7Utilize &c/evento ban <player> <evento>&7!"
+    #Caso o player utilize o comando unban incorretamente:
+    UnBan: "&6&lDEventos &7Utilize &c/evento unban <player> <evento>&7!"
+    #Caso o player utilize o comando iniciar incorretamente:
+    Iniciar: "&6&lDEventos &7Utilize &c/evento iniciar <evento>&7!"
+    #Caso o player utilize o comando parar incorretamente:
+    Parar: "&6&lDEventos &7Utilize &c/evento parar <evento>&7!"
+    #Caso o staff utilize o comando info incorretamente:
+    Info: "&6&lDEventos &7Utilize &c/evento info <evento>"
+    #Caso o player utilize o comando entrar incorretamente:
+    Entrar: "&6&lDEventos &7Utilize &c/evento entrar <evento>&7!"
+    #Caso o player utilize o comando sair incorretamente:
+    Sair: "&6&lDEventos &7Utilize &c/evento sair <evento>&7!"
+    #Caso o player utilize o comando espectador incorretamente:
+    Espectar: "&6&lDEventos &7Utilize &c/evento espectador <evento>&7!"
+    #Caso o mundo que o player ira se teletransportar seja invalido:
+    Mundo_Invalido: "&c&lDEventos &7O mundo que você iria se teletransportar é inválido!"
+    #Caso o player tente entrar em um evento, mas o mesmo esteja lotado:
+    Evento_Lotato: "&c&lDEventos &7O evento que você quer entrar se encontra lotado!"
+    #Mensagem avisando que o player deve estar com o inventário vázio para poder participar do evento:
+    Inv_Vazio: "&c&lDEventos &7Você tem de estar com o inventário vázio para poder participar deste evento!"
+    #Mensagem avisando que o player deve estar com o inventário vázio para poder recuperar seus itens:
+    Recuperar_Inv_Vazio: "&c&lDEventos &7Você tem de estar com o inventário vázio para poder recuperar seus itens!"
+    #Caso o player já esteja em um evento, mas mesmo assim tente entrar em outro:
+    Ja_Esta_Em_Um_Evento: "&c&lDEventos &7Você já se encontra em um evento!"
+    #Caso o player não tenha permissão para entrar em um evento:
+    Sem_Permissao_Entrar: "&c&lDEventos &7Você não pode entrar no evento &c&l{evento}&7!"
+    #Caso o player tente entrar no modo espectador de um evento que não está com ele ativo
+    Espectador_Desativado: "&c&lDEventos &7Esse evento não está com o modo espectador ativo!"
+    #Caso o staff tente setar o lobby de um evento que não está com ele ativo
+    Lobby_Desativado: "&c&lDEventos &7Esse evento não está com o lobby ativo!"
+    #Caso o player tente entrar em um evento, mas esteja banido:
+    Esta_Banido: "&c&lDEventos &7Você está banido deste evento!"
+    #Caso o staff tente banir um player offline:
+    Player_Offline: "&c&lDEventos &7Este player não se encontra online!"
+    #Caso o staff tente banir um player já banido:
+    Ja_Esta_Banido: "&c&lDEventos &7Este player já está banido!"
+    #Caso o staff tente desbanir um player que não está banido:
+    Nao_Esta_Banido: "&c&lDEventos &7Este player não está banido!"
+    #Caso dê algum erro ao banir o player do evento:
+    Erro_Banir: "&c&lDEventos &7Não foi possível banir este player do evento!"
+    #Caso dê algum erro ao desbanir o player do evento:
+    Erro_Desbanir: "&c&lDEventos &7Não foi possível desbanir este player do evento!"
+    #Caso um evento não exista:
+    Evento_Invalido: "&c&lDEventos &7Este evento não existe!"
+    #Caso um staff tente dar reload no plugin, mas exista um evento ocorrendo:
+    Existe_Ocorrendo: "&c&lDEventos &7Para dar reload no plugin, nenhum evento deve estar ocorrendo!"
+    #Caso o staff não informe um número:
+    Nao_E_Numero: "&c&lDEventos &7Informe um número válido!"
+    #Caso o staff informe algo além de true/false:
+    Utilize_True_Ou_False: "&c&lDEventos &7Informe apenas &c&ltrue&7/&c&lfalse&7!"
+    #Caso o staff informe um número menor que 0!
+    Numero_Valido: "&c&lDEventos &7Informe um número maior que 0!"
+    #Caso ocorra algum erro ao setar a propriedade de um evento:
+    Erro_SetProperty: "&c&lDEventos &7Ocorreu um erro ao setar a propriedade &c&l{property} &7do evento &c&l{evento}&7!"
+    #Caso o bau informado não exista no evento:
+    Bau_Invalido: "&c&lDEventos &7O baú informado não existe!"
+    #Caso o staff tente iniciar um evento, mas já tenha outro em andamento:
+    Ja_Existe_Em_Andamento: "&c&lDEventos &7Já existe um evento em andamento!"
+    #Caso o staff tente abrir um evento que já está aberto:
+    Ja_Esta_Aberto: "&c&lDEventos &7Este evento já se encontra aberto!"
+    #Caso o staff tente parar um evento que não esteja ocorrendo:
+    Nao_Esta_Aberto: "&c&lDEventos &7Este evento não se encontra aberto!"
+    #Caso um player tente sair de um evento, mas não esteja em nenhum:
+    Nao_Esta: "&c&lDEventos &7Você não se encontra em nenhum evento!"
+    #Caso o rank de top vencedores ainda não tenha sido carregado:
+    TOP_Vitorias_Nao_Definido: "&c&lDEventos &7O rank de vencedores ainda não foi carregado!"
+    #Caso o rank de top perdedores ainda não tenha sido carregado:
+    TOP_Derrotas_Nao_Definido: "&c&lDEventos &7O rank de perdedores ainda não foi carregado!"
+    #Caso o rank de top participadores ainda não tenha sido carregado:
+    TOP_Participacoes_Nao_Definido: "&c&lDEventos &7O rank de participadores ainda não foi carregado!"
+    #Caso o player tente utilizar um comando bloqueado:
+    Comando_Bloqueado: "&c&lDEventos &7O comando &c&l{cmd} &7não pode ser utilizado neste evento!"
+    #Caso um espectador tente hitar um player:
+    No_PvP_Espectador: "&c&lDEventos &7VocÊ não pode hitar outros players enquanto estiver espectando!"
+    #Caso o PvP do evento ainda não tenha sido ativado:
+    PvP_Ainda_Nao_Ativo: "&c&lDEventos &7O PvP ainda não foi ativado!"
+    #Caso o evento tenha pvp off:
+    No_PvP: "&c&lDEventos &7Este evento é PvP &c&lOFF&7!"
+    #Caso o player tente se teletransportar durante um evento:
+    No_Teleport: "&c&lDEventos &7Você não pode se teletransportar durante um evento!"
+    #Caso o player tente construir durante o evento:
+    No_Build: "&c&lDEventos &7Você não pode construir durante o evento!"
+    #Caso o player tente clicar em uma placa de ganhar, mas não esteja no evento:
+    Nao_Esta_Evento: "&c&lDEventos &7Você não se encontra nesse evento!"
+    #Caso o player clique em uma placa de evento, mas o mesmo não esteja em andamento:
+    Nao_Ocorrendo: "&c&lDEventos &7Este evento ainda não começou!"
+    #Caso o player clique em uma placa, mas para ganhar precise passar por um bloco:
+    Passar_Bloco: "&c&lDEventos &7Você precisa passar por cima de um bloco de &c&l{bloco} &7para ganhar!"
+    #Caso o player tente entrar ou espectar um evento, mas tenha itens salvos:
+    Recuperar_Itens: "&c&lDEventos &7Primeiramente recupere seus itens salvos anteriormente utilizando &c/evento recuperar&7!"
+    #Caso o player não tenha itens para recuperar:
+    Sem_Itens_Recuperar: "&c&lDEventos &7Você não tem itens para serem recuperados!"
+  #Mensagens de sucesso:
+  Sucesso:
+    #Ao staff banir um player de um evento:
+    Baniu: "&a&lDEventos &fVocê baniu o player &a&l{player} &fdo evento &b&l{evento}&f!"
+    #Ao staff desbanir um player de um evento:
+    Desbaniu: "&a&lDEventos &fVocê desbaniu o player &a&l{player} &fdo evento &b&l{evento}&f!"
+    #Ao recarregar o plugin:
+    Eventos_Recarregados: "&a&lDEventos &fEventos &a&l{eventos} ({qnt}) &frecarregados!"
+    #Ao setar o premio de um evento:
+    Premio_Setado: "&a&lDEventos &fPrêmio setado para &a&lR${quantidade}&f!"
+    #Ao setar o número mínimo de players necessários para iniciar o evento:
+    Min_Players_Setado: "&a&lDEventos &fMínimo de players necessário setado para &a&l{quantidade}&f!"
+    #Ao setar o limite de players no evento:
+    Max_Players_Setado: "&a&lDEventos &fMáximo de players suportados setado para &a&l{quantidade}&f!"
+    #Ao setar a quantidade de anuncios do evento:
+    Anuncios_Setado: "&a&lDEventos &fAnúncios do evento setado para &a&l{quantidade}&f!"
+    #Ao setar o tempo entre os anuncios do evento:
+    Tempo_Anuncios_Setado: "&a&lDEventos &fTempo entre os anúncios setado para &a&l{quantidade} segundos&f!"
+    #Ao setar o tempo para o fim do evento:
+    Tempo_Acabar_Evento_Setado: "&a&lDEventos &fTempo parar acabar o evento setado para &a&l{quantidade} minutos&f!"
+    #Ao ativar o UVG:
+    Ultimo_Vivo_Ganha_Ativado: "&a&lDEventos &fUVG ativado com sucesso!"
+    #Ao desativar o UVG:
+    Ultimo_Vivo_Ganha_Desativado: "&a&lDEventos &fUVG desativado com sucesso!"
+    #Ao ativar o UEG:
+    Ultimo_Player_No_Evento_Ganha_Ativado: "&a&lDEventos &fUEG ativado com sucesso!"
+    #Ao desativar o UEG:
+    Ultimo_Player_No_Evento_Ganha_Desativado: "&a&lDEventos &fUEG desativado com sucesso!"
+    #Ao setar o spawn do evento:
+    Spawn_Setado: "&a&lDEventos &fSpawn do evento &a&l{evento} &fsetado com sucesso!"
+    #Ao setar o lobby do evento:
+    Lobby_Setado: "&a&lDEventos &fLobby do evento &a&l{evento} &fsetado com sucesso!"
+    #Ao setar a saida do evento:
+    Exit_Setado: "&a&lDEventos &fSaida do evento &a&l{evento} &fsetado com sucesso!"
+    #Ao setar o local do espectador no evento:
+    Espectador_Setado: "&a&lDEventos &fLocal do espectador do evento &a&l{evento} &fsetado com sucesso!"
+    #Ao setar um bau no evento:
+    Bau_Setado: "&a&lDEventos &fBaú &a&l{bau} &fsetado no evento &a&l{evento}&f!"
+    #Ao deletar um bau no evento:
+    Bau_Deletado: "&a&lDEventos &fBaú &a&l{bau} &fdeletado no evento &a&l{evento}&f!"
+    #Ao iniciar um evento:
+    Iniciou: "&b&lDEventos &fEvento &b&l{evento} &finiciado com sucesso!"
+    #Ao parar um evento:
+    Parou: "&b&lDEventos &fEvento &b&l{evento} &fparado com sucesso!"
+    #Ao alterar a tag de um evento:
+    TAG_Setado: "&b&lDEventos &fTag do evento &b&l{evento} &falterada para &b&l{value}&f!"
+    #Ao ativar o bypassmax:
+    Allow_ByPass_Max_Players_Ativado: "&a&lDEventos &fByPassMax ativado com sucesso!"
+    #Ao desativar o bypassmax:
+    Allow_ByPass_Max_Players_Desativado: "&a&lDEventos &fByPassMax desativado com sucesso!"
+    #Ao ativar o salvarinv:
+    Salvar_Inv_Ativado: "&a&lDEventos &fSalvar inventário ativado com sucesso!"
+    #Ao desativar o salvarinv:
+    Salvar_Inv_Desativado: "&a&lDEventos &fSalvar inventário desativado com sucesso!"
+    #Ao ativar o ativarespectador:
+    Ativar_Espectador_Ativado: "&a&lDEventos &fModo espectador ativado com sucesso!"
+    #Ao desativar o ativarespectador:
+    Ativar_Espectador_Desativado: "&a&lDEventos &fModo espectador desativado com sucesso!"
+    #Ao ativar o ativarlobby:
+    Ativar_Lobby_Ativado: "&a&lDEventos &fLobby ativado com sucesso!"
+    #Ao desativar o ativarlobby:
+    Ativar_Lobby_Desativado: "&a&lDEventos &fLobby desativado com sucesso!"
+    #Ao ativar o desativarPVP:
+    Desativar_PvP_Ativado: "&a&lDEventos &fPvp desativado com sucesso!"
+    #Ao desativar o desativarPVP:
+    Desativar_PvP_Desativado: "&a&lDEventos &fPvp ativado com sucesso!"
+    #Ao ativar o desativarDamage:
+    Desativar_Damage_Ativado: "&a&lDEventos &fDanos desativados com sucesso!"
+    #Ao desativar o desativarDamage:
+    Desativar_Damage_Desativado: "&a&lDEventos &fDanos ativados com sucesso!"
+    #Ao ativar o desativarFome:
+    Desativar_Fome_Ativado: "&a&lDEventos &fFome desativada com sucesso!"
+    #Ao desativar o desativarFome:
+    Desativar_Fome_Desativado: "&a&lDEventos &fFome ativada com sucesso!"
+    #Ao ativar o desativarFF:
+    Desativar_FF_Ativado: "&a&lDEventos &fAgora o FF será desativado durante o evento!"
+    #Ao desativar o desativarFF:
+    Desativar_FF_Desativado: "&a&lDEventos &fAgora o FF não será desativado durante o evento!"
+    #Ao player sair de um evento:
+    Saiu: "&b&lDEventos &fVocê saiu do evento em que estava!"
+    #Ao player entrar no modo espectador:
+    Espectando: "&b&lDEventos &fAgora você está espectando o evento &b{evento}&f!"
+    #Mensagem enviada a todos do evento avisando que um player saiu:
+    Player_Saiu: "&e&lDEventos &f&l{player} &7saiu do evento!"
+    #Ao player entrar em um evento:
+    Entrou: "&b&lDEventos &fVocê entrou no evento &b&l{evento}&f!"
+    #Mensagem enviada a todos do evento avisando que um player entrou:
+    Player_Entrou: "&e&lDEventos &f&l{player} &7entrou no evento!"
+    #Player recuperou seus itens:
+    Recuperou_Itens: "&b&lDEventos &7Você recuperou seus itens salvos de eventos anteriores!"
+    #Informações do evento
+    Info:
+    - "&a&lDEventos &7Informações do evento &a&l{evento}&7:"
+    - "&7Tag para o vencedor: &e{tag}"
+    - "&7Permissão para entrar: &e{permissao}"
+    - "&7Permissão de bypass: &e{permissaobypass}"
+    - "&7Permissão para espectar: &e{permissaoespectar}"
+    - "&7Prêmio: &e{premio}"
+    - "&7Quantidade de players no evento: &e{players}"
+    - "&7Quantidade de espectadores no evento: &e{espectadores}"
+    - "&7PvP desativado durante o evento: &e{desativarpvp}"
+    - "&7Danos desativados durante o evento: &e{desativardamage}"
+    - "&7FF desativado durante o evento: &e{desativarff}"
+    - "&7Fome desativada durante o evento: &e{desativarfome}"
+    - "&7Requer inventário vazio: &e{invvazio}"
+    - "&7Permissão de bypass pode ser utilizada: &e{bypassmax}"
+    - "&7Último player vivo no evento ganha: &e{ultimovivoganha}"
+    - "&7Último player no evento ganha: &e{ultimoeventoganha}"
+    - "&7Salvar inventário dos players: &e{salvarinv}"
+    - "&7Lobby ativado: &e{ativarlobby}"
+    - "&7Espectador ativado: &e{ativarespectador}"
+    - "&7Tempo entre os anúncios do evento: &e{tempoanuncios} segundos"
+    - "&7Tempo para o evento acabar: &e{tempoacabar} minutos"
+    - "&7Quantidade de anúncios: &e{anuncios}"
+    - "&7Quantidade mínima de players para poder iniciar o evento: &e{minplayers}"
+    - "&7Quantidade máxima de players no evento: &e{maxplayers}"
+    - "&7Último vencedor: &e{ultimovencedor}"
+#Motivos para o evento ser cancelado:
+Motivos:
+  #Haviam poucos players no evento:
+  Poucos_Players: "Haviam poucos players no evento"
+  #Um staff cancelou o evento:
+  Staff_Cancelou: "Um staff cancelou o evento"
+  #Caso nao haja vencedores no evento:
+  Sem_Vencedor: "Nao houve vencedores"
+  #Caso o tempo do evento seja atingido:
+  Tempo_Atingido: "Tempo do evento atingido"

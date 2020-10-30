@@ -1,0 +1,175 @@
+#Nome do evento:
+Nome: "Parkour"
+#Prêmio para o vencedor
+Premio: 10000.0
+#Quantidade de anúncios avisando que o evento está começando
+Anuncios: 5
+#Tempo entre cada anúncio
+Tempo_Anuncios: 30
+#Quantidade mínima de players no evento para ele poder ser iniciado
+Min_Players: 5
+#Quantidade máxima de players no evento
+#Caso seja "0", não haverá limite
+Max_Players: 0
+#Deseja que os players possam entrar no evento, mesmo com ele lotado?
+#Somente player com a permissão definida podem entrar com o evento cheio!
+Allow_ByPass_Max_Players: true
+#Caso todos os players morram e rete apenas um, o que restou irá ganhar?
+Ultimo_Vivo_Ganha: true
+#Caso todos os players saiam do evento e reste apenas um, o que restou irá ganhar?
+Ultimo_Player_No_Evento_Ganha: true
+#Permissão para poder participar do evento
+Permissao: "feventos.evento.parkour"
+#Permissão para poder espectar o evento
+Permissao_Espectar: "feventos.evento.parkour"
+#Permissão para entrar no evento lotado
+Permissao_ByPass: "feventos.evento.parkour.bypass"
+#Deseja que os players possam espectar o evento?
+Ativar_Espectador: true
+#Desativar pvp durante o evento?
+Desativar_PvP: true
+#O player irá vencer o evento ao passar por cima de um bloco?
+Passar_Bloco: false
+#Bloco que será necessário o player passar para vencer o evento
+#Só irá funcionar se o "Passar_Bloco" estiver ativado
+#Ao você ativar esta função, o player não irá ganhar ao clicar na placa
+Bloco_Passar: "DIAMOND_BLOCK"
+#Dar tag ao vencedor?
+Dar_TAG: true
+#Tag que o player irá ganhar caso ganhe o evento
+TAG: "&9[Parkourzeiro]"
+#Desativar danos durante o evento?
+Desativar_Damage: true
+#Deseja desativar o Friendly Fire do clan do player no evento?
+Desativar_FF: true
+#Salvar o inventário do player?
+#Se estiver "true" e o player morrer, o inventário dele será redefinido ao renascer
+Salvar_Inv: true
+#Para entrar no evento o player tem de estar com inventário vazio?
+Inv_Vazio: false
+#Caso esteja "true", os players do evento não sentirão fome ao participarem
+Desativar_Fome: true
+#Enviar o player para o lobby ao dar /evento entrar
+#Caso seja false, o player será teletransportado diretamente para entrada do evento
+#Ideal para eventos como Killer!
+Ativar_Lobby: true
+#Caso não haja vencedores dentro do tempo definido, o evento se encerrará sozinho!
+#Caso não queira que o evento acabe automaticamente, defina o valor como 0
+#O tempo é em minutos!
+Tempo_Acabar_Evento: 5
+#Avisos que apareceção para os participantes do evento em X segundos
+Avisos_Evento:
+  60:
+  - "&c&lEVENTO &6&l1 minuto &fde evento!"
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l4 minutos&f!"
+  120:
+  - "&c&lEVENTO &6&l2 minutos &fde evento!"
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l3 minutos&f!"
+  180:
+  - "&c&lEVENTO &6&l3 minutos &fde evento!"
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l2 minutos&f!"
+  240:
+  - "&c&lEVENTO &6&l4 minutos &fde evento!"
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l1 minutos&f!"
+  270:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l30 segundos&f!"
+  290:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l10 segundos&f!"
+  295:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l5 segundos&f!"
+  296:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l4 segundos&f!"
+  297:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l3 segundos&f!"
+  298:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l2 segundos&f!"
+  299:
+  - "&c&lEVENTO &fEvento sendo finalizado em &6&l1 segundo&f!"
+#Caso queira que sejam executados comandos quando tiver um vencedor,
+#   coloque-os aqui!
+#Comando sem a "/"!
+#{player} = vencedor do evento
+#
+#Caso não queira executar comandos, deixe assim:
+#    Comandos_Vencedor: []
+Comandos_Vencedor:
+- "effect {player} SPEED 60 1"
+- "comandos aqui"
+- "adicione quantos quiser"
+#Comandos liberados para quem estiver no evento
+#Comando sem a "/"!
+Comandos_Liberados:
+- "buff"
+- "anuncio"
+- "anunciar"
+- "megafone"
+- "l"
+- "g"
+- "money"
+- "evento"
+#Comandos que serão executados quando o evento iniciar
+#Caso não queira executar comandos, deixe assim:
+#    Comandos_Ao_Iniciar: []
+Comandos_Ao_Iniciar:
+- "say Uma mensagem porque o evento iniciou"
+#Localizações do evento
+#NÃO MECHER!
+Locations:
+  Spawn: "world;0;4;0;0;0"
+  Lobby: "world;0;4;0;0;0"
+  Exit: "world;0;4;0;0;0"
+  Espectador: "world;0;4;0;0;0"
+#Efeitos que o player irá ganhar ao iniciar o evento:
+#Formato: "{nome} {tempo} {nivel}"
+#Caso não queira dar efeitos, deixe assim:
+#    Efeitos_Ao_Iniciar: []
+Efeitos_Ao_Iniciar:
+- "velocidade 60 2"
+- "pulo 60 2"
+#Último vendedor do evento
+#NÃO MECHER!
+Vencedor: "null"
+#Mensagens do evento
+Mensagem:
+  #Quando um player vencer um evento:
+  Vencedor:
+  - "&d"
+  - "&d"
+  - "&d[EVENTO] &fPlayer {player} ganhou o evento {evento}!"
+  - "&d[EVENTO] &fO premio entregue a ele foi de R${premio}!"
+  - "&d[EVENTO] &fBoa sorte aos outros players na proxima!"
+  - "&d[EVENTO] &fTodos os players foram teleportados ate a saida!"
+  - "&d"
+  - "&d"
+  #Evento sendo iniciado:
+  Evento_Iniciando:
+  - "&d"
+  - "&d"
+  - "&d[EVENTO] &fEvento {evento} sendo iniciado!"
+  - "&d[EVENTO] &fPara entrar utilize /evento entrar {evento}!"
+  - "&d[EVENTO] &fO premio deste evento e de de R${premio}!"
+  - "&d[EVENTO] &fTeleporte para o evento sendo fechado em {anuncios} chamadas ou {tempo} segundos!"
+  - "&d[EVENTO] &fPara este evento poder ocorrer sao necessarios {minplayers} players!"
+  - "&d[EVENTO] &fNo momento existem {players} players no evento!"
+  - "&d"
+  - "&d"
+  #Evento iniciado:
+  Evento_Iniciado:
+  - "&d"
+  - "&d"
+  - "&d[EVENTO] &fEvento {evento} iniciado!"
+  - "&d[EVENTO] &fTeleporte para o evento trancado!"
+  - "&d[EVENTO] &fO premio deste evento e de de R${premio}!"
+  - "&d[EVENTO] &fBoa sorte aos {players} players no evento!"
+  - "&d"
+  - "&d"
+  #Evento cancelado:
+  Evento_Cancelado:
+  - "&d"
+  - "&d"
+  - "&d[EVENTO] &fEvento {evento} cancelado!"
+  - "&d[EVENTO] &fMotivo: {motivo}!"
+  - "&d[EVENTO] &fO premio deste evento era de de R${premio}!"
+  - "&d[EVENTO] &f{players} players teleportados ate a saida!"
+  - "&d"
+  - "&d"

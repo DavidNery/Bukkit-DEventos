@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>me.dery.deventos</groupId>
+	<artifactId>DEventos</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>DEventos</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.localrepo>P:/Java/APIS</project.localrepo>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.8.8</version>
+			<scope>system</scope>
+			<systemPath>${project.localrepo}/spigot-1.8.8.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.github.MilkBowl</groupId>
+			<artifactId>VaultAPI</artifactId>
+			<version>1.2.25-b333</version>
+			<scope>system</scope>
+			<systemPath>${project.localrepo}/Vault.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>net.sacredlabyrinth.phaed.simpleclans</groupId>
+			<artifactId>SimpleClans</artifactId>
+			<version>2.4.1</version>
+			<scope>system</scope>
+			<systemPath>${project.localrepo}/simpleclans-2.4.1.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>br.com.devpaulo.legendchat</groupId>
+			<artifactId>Legendchat</artifactId>
+			<version>1.1.2</version>
+			<scope>system</scope>
+			<systemPath>${project.localrepo}/Legendchat.jar</systemPath>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
