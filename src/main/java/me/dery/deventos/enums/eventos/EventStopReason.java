@@ -1,6 +1,6 @@
 package me.dery.deventos.enums.eventos;
 
-public enum EventoStopReason {
+public enum EventStopReason {
 
 	TEMPOATINGIDO("Tempo_Atingido"),
 	POUCOSPLAYERS("Poucos_Players"),
@@ -9,6 +9,6 @@ public enum EventoStopReason {
 
 	public final String propertyInConfig;
 
-	private EventoStopReason(String propertyInConfig) { this.propertyInConfig = propertyInConfig; }
+	private EventStopReason(String propertyInConfig) { this.propertyInConfig = propertyInConfig; }
 
 }

@@ -6,22 +6,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 import me.dery.deventos.utils.LocationUtils;
 
 public class TeleportListener implements Listener {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
 	private final LocationUtils locationUtils;
 
 	public TeleportListener(DEventos instance) {
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
+		eventsManager = instance.getEventosManager();
 
 		locationUtils = instance.getLocationUtils();
 	}
@@ -33,15 +33,15 @@ public class TeleportListener implements Listener {
 		if (p.hasPermission("deventos.bypasstp") || p.hasPermission("deventos.admin"))
 			return;
 
-		for (Evento evento : eventosManager.getEmAndamento()) {
-			if (evento.getPlayers().contains(p.getName()) || evento.getEspectadores().contains(p.getName())) {
+		for (Event event : eventsManager.getEmAndamento()) {
+			if (event.getPlayers().contains(p.getName()) || event.getEspectadores().contains(p.getName())) {
 
-				if (e.getTo().equals(locationUtils.deserializeLocation(evento.getSpawn()))
-					|| e.getTo().equals(locationUtils.deserializeLocation(evento.getExit()))
-					|| (evento.ativarLobby()
-						&& e.getTo().equals(locationUtils.deserializeLocation(evento.getLobby())))
-					|| (evento.ativarEspectador()
-						&& e.getTo().equals(locationUtils.deserializeLocation(evento.getEspectador())))
+				if (e.getTo().equals(locationUtils.deserializeLocation(event.getSpawn()))
+					|| e.getTo().equals(locationUtils.deserializeLocation(event.getExit()))
+					|| (event.ativarLobby()
+						&& e.getTo().equals(locationUtils.deserializeLocation(event.getLobby())))
+					|| (event.ativarEspectador()
+						&& e.getTo().equals(locationUtils.deserializeLocation(event.getEspectador())))
 					|| e.getTo().equals(e.getFrom()))
 					return;
 

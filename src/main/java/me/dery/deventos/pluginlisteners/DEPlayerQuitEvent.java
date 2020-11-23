@@ -1,12 +1,10 @@
 package me.dery.deventos.pluginlisteners;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.dery.deventos.objects.Evento;
-
-public class DEPlayerQuitEvent extends Event {
+public class DEPlayerQuitEvent extends org.bukkit.event.Event {
 
 	public enum QuitReason {
 		/**
@@ -29,19 +27,19 @@ public class DEPlayerQuitEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 
-	private Evento evento;
+	private Event event;
 
 	private Player player;
 
 	private QuitReason quitreason;
 
-	public DEPlayerQuitEvent(Player player, Evento evento, QuitReason quitreason) {
+	public DEPlayerQuitEvent(Player player, Event event, QuitReason quitreason) {
 		this.player = player;
-		this.evento = evento;
+		this.event = event;
 		this.quitreason = quitreason;
 	}
 
-	public Evento getEvento() { return evento; }
+	public Event getEvento() { return event; }
 
 	public Player getPlayer() { return player; }
 

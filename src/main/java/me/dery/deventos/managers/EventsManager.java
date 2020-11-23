@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,19 +21,18 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.enums.eventos.EventoProperty;
+import me.dery.deventos.enums.eventos.EventProperty;
 import me.dery.deventos.enums.others.BanAction;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.objects.Evento;
 import me.dery.deventos.pluginlisteners.DEPlayerJoinEvent;
 import me.dery.deventos.utils.InventoryUtils;
 import me.dery.deventos.utils.LocationUtils;
 
-public class EventosManager {
+public class EventsManager {
 
 	private final DEventos instance;
 
-	private final List<Evento> loadedEventos, emAndamento;
+	private final List<Event> loadedEvents, emAndamento;
 
 	private final List<String> defaultChestItems;
 
@@ -40,11 +40,11 @@ public class EventosManager {
 
 	private final InventoryUtils inventoryUtils;
 
-	public EventosManager(DEventos instance) {
+	public EventsManager(DEventos instance) {
 
 		this.instance = instance;
 
-		loadedEventos = new ArrayList<>();
+		loadedEvents = new ArrayList<>();
 		emAndamento = new ArrayList<>();
 
 		defaultChestItems = new ArrayList<>();
@@ -57,37 +57,37 @@ public class EventosManager {
 
 	}
 
-	public List<Evento> getLoadedEventos() { return loadedEventos; }
+	public List<Event> getLoadedEventos() { return loadedEvents; }
 
-	public List<Evento> getEmAndamento() { return emAndamento; }
+	public List<Event> getEmAndamento() { return emAndamento; }
 
 	public List<String> getDefaultChestItems() { return defaultChestItems; }
 
-	public List<Evento> loadEventos() {
+	public List<Event> loadEventos() {
 
 		for (File f : new File(instance.getDataFolder(), "eventos").listFiles())
 			if (f.getName().endsWith(".yml"))
-				loadedEventos.add(new Evento(f));
+				loadedEvents.add(new Event(f));
 
-		return loadedEventos;
-
-	}
-
-	public LinkedHashSet<Evento> getPlayerLastWinnerEvents(String winner) {
-
-		LinkedHashSet<Evento> eventos = new LinkedHashSet<>();
-
-		for (Evento evento : loadedEventos)
-			if (evento.getLastWinner().equalsIgnoreCase(winner))
-				eventos.add(evento);
-
-		return eventos;
+		return loadedEvents;
 
 	}
 
-	public Evento getEventoByName(String evento) {
+	public LinkedHashSet<Event> getPlayerLastWinnerEvents(String winner) {
 
-		for (Evento ev : loadedEventos)
+		LinkedHashSet<Event> events = new LinkedHashSet<>();
+
+		for (Event event : loadedEvents)
+			if (event.getLastWinner().equalsIgnoreCase(winner))
+				events.add(event);
+
+		return events;
+
+	}
+
+	public Event getEventoByName(String evento) {
+
+		for (Event ev : loadedEvents)
 			if (ev.getNome().equalsIgnoreCase(evento))
 				return ev;
 
@@ -95,61 +95,61 @@ public class EventosManager {
 
 	}
 
-	public Evento getEventoByEspectador(CommandSender espectador) {
+	public Event getEventoByEspectador(CommandSender espectador) {
 
 		String espectadorName = espectador.getName();
 
-		for (Evento evento : emAndamento)
-			if (evento.getEspectadores().contains(espectadorName))
-				return evento;
+		for (Event event : emAndamento)
+			if (event.getEspectadores().contains(espectadorName))
+				return event;
 
 		return null;
 
 	}
 
-	public Evento getEventoByPlayer(CommandSender player) {
+	public Event getEventoByPlayer(CommandSender player) {
 
 		String playerName = player.getName();
 
-		for (Evento evento : emAndamento)
-			if (evento.getPlayers().contains(playerName))
-				return evento;
+		for (Event event : emAndamento)
+			if (event.getPlayers().contains(playerName))
+				return event;
 
 		return null;
 
 	}
 
-	public void addPlayerInEvent(Player p, Evento evento) throws EventoException {
+	public void addPlayerInEvent(Player p, Event event) throws EventoException {
 
-		if (evento.ativarLobby()) {
-			Location lobbyLocation = locationUtils.deserializeLocation(evento.getLobby());
+		if (event.ativarLobby()) {
+			Location lobbyLocation = locationUtils.deserializeLocation(event.getLobby());
 
 			if (lobbyLocation.getWorld() == null)
 				throw new EventoException("Mundo_Invalido");
 
 			p.teleport(lobbyLocation);
 		} else {
-			p.teleport(locationUtils.deserializeLocation(evento.getSpawn()));
+			p.teleport(locationUtils.deserializeLocation(event.getSpawn()));
 		}
 
 		String msg = instance.getConfig().getString("Mensagem.Sucesso.Player_Entrou")
 			.replace("&", "§").replace("{player}", p.getName());
 
-		evento.getPlayers().forEach(player -> instance.getServer().getPlayer(player).sendMessage(msg));
+		event.getPlayers().forEach(player -> instance.getServer().getPlayer(player).sendMessage(msg));
 
 		p.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Entrou")
-			.replace("&", "§").replace("{evento}", evento.getNome()));
+			.replace("&", "§").replace("{evento}", event.getNome()));
 
-		evento.getPlayers().add(p.getName());
+		event.getPlayers().add(p.getName());
 
-		if (evento.salvarInv())
+		if (event.salvarInv())
 			try {
 				inventoryUtils.saveInventory(p);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
-		DEPlayerJoinEvent join = new DEPlayerJoinEvent(p, evento);
+		DEPlayerJoinEvent join = new DEPlayerJoinEvent(p, event);
 		instance.getServer().getPluginManager().callEvent(join);
 
 	}
@@ -158,23 +158,23 @@ public class EventosManager {
 	 * Necessário remover o player da lista de players do evento, caso ele esteja
 	 * 
 	 * @param p
-	 * @param evento
+	 * @param event
 	 * @param addInEspectadoresList
 	 * @throws EventoException
 	 */
-	public void addPlayerInEspectadorEvent(Player p, Evento evento, boolean addInEspectadoresList)
+	public void addPlayerInEspectadorEvent(Player p, Event event, boolean addInEspectadoresList)
 		throws EventoException {
 
-		Location espectadorLocation = locationUtils.deserializeLocation(evento.getEspectador());
+		Location espectadorLocation = locationUtils.deserializeLocation(event.getEspectador());
 
 		if (espectadorLocation.getWorld() == null)
 			throw new EventoException("Mundo_Invalido");
 
 		if (addInEspectadoresList)
-			evento.getEspectadores().add(p.getName());
+			event.getEspectadores().add(p.getName());
 
 		p.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Espectando")
-			.replace("&", "§").replace("{evento}", evento.getNome()));
+			.replace("&", "§").replace("{evento}", event.getNome()));
 
 		p.teleport(espectadorLocation);
 
@@ -191,16 +191,16 @@ public class EventosManager {
 
 	/**
 	 * @param p O player
-	 * @param evento O evento
+	 * @param event O evento
 	 * @param removeFrom A lista que irá remover o player. <strong>Evento#getPlayers()</strong> ou
 	 *            <strong>Evento#getEspectadores()</strong>
 	 * @param restoreInventory restaurar o inventário do player
 	 * @throws EventoException
 	 * @return <strong>true</strong> se houver vencedor
 	 */
-	public void removePlayerFromEvent(String p, Evento evento, List<String> removeFrom, boolean restoreInventory)
+	public void removePlayerFromEvent(String p, Event event, List<String> removeFrom, boolean restoreInventory)
 		throws EventoException {
-		Location exitLocation = locationUtils.deserializeLocation(evento.getExit());
+		Location exitLocation = locationUtils.deserializeLocation(event.getExit());
 
 		if (exitLocation.getWorld() == null)
 			throw new EventoException("Mundo_Invalido");
@@ -223,7 +223,7 @@ public class EventosManager {
 
 		if (removeFrom != null) {
 			removeFrom.remove(p);
-			if (removeFrom.equals(evento.getEspectadores())) {
+			if (removeFrom.equals(event.getEspectadores())) {
 				player.getInventory().clear();
 				player.getInventory().setArmorContents(null);
 			}
@@ -231,8 +231,8 @@ public class EventosManager {
 
 	}
 
-	public boolean isBan(String player, Evento evento) {
-		List<String> bannedPlayers = getEventoConfig(evento).getStringList(EventoProperty.BANS.keyInConfig);
+	public boolean isBan(String player, Event event) {
+		List<String> bannedPlayers = getEventoConfig(event).getStringList(EventProperty.BANS.keyInConfig);
 
 		if (bannedPlayers == null)
 			return false;
@@ -244,10 +244,10 @@ public class EventosManager {
 		return false;
 	}
 
-	public boolean togglePlayerBanStatus(BanAction action, String player, Evento evento) throws IOException {
-		FileConfiguration config = getEventoConfig(evento);
+	public boolean togglePlayerBanStatus(BanAction action, String player, Event event) throws IOException {
+		FileConfiguration config = getEventoConfig(event);
 
-		List<String> bannedPlayers = config.getStringList(EventoProperty.BANS.keyInConfig);
+		List<String> bannedPlayers = config.getStringList(EventProperty.BANS.keyInConfig);
 
 		if (bannedPlayers == null) {
 			if (action == BanAction.UNBAN)
@@ -264,7 +264,7 @@ public class EventosManager {
 			if (bannedPlayer.equalsIgnoreCase(player)) {
 				if (action == BanAction.UNBAN) {
 					it.remove();
-					setAndSaveEventoConfig(evento, config, EventoProperty.BANS, bannedPlayers);
+					setAndSaveEventoConfig(event, config, EventProperty.BANS, bannedPlayers);
 
 					return true;
 				} else {
@@ -278,19 +278,19 @@ public class EventosManager {
 			return false;
 
 		bannedPlayers.add(player);
-		setAndSaveEventoConfig(evento, config, EventoProperty.BANS, bannedPlayers);
+		setAndSaveEventoConfig(event, config, EventProperty.BANS, bannedPlayers);
 
 		return true;
 	}
 
-	public FileConfiguration getEventoConfig(Evento evento) {
-		return YamlConfiguration.loadConfiguration(evento.getFileEvento());
+	public FileConfiguration getEventoConfig(Event event) {
+		return YamlConfiguration.loadConfiguration(event.getFileEvento());
 	}
 
-	private void setAndSaveEventoConfig(Evento evento, FileConfiguration config, EventoProperty property, Object value)
+	private void setAndSaveEventoConfig(Event event, FileConfiguration config, EventProperty property, Object value)
 		throws IOException {
 		config.set(property.keyInConfig, value);
-		config.save(evento.getFileEvento());
+		config.save(event.getFileEvento());
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,63 +22,62 @@ import org.bukkit.scheduler.BukkitTask;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.databases.DBManager;
-import me.dery.deventos.enums.eventos.EventoProperty;
-import me.dery.deventos.enums.eventos.EventoState;
-import me.dery.deventos.enums.eventos.EventoStopReason;
+import me.dery.deventos.enums.eventos.EventProperty;
+import me.dery.deventos.enums.eventos.EventState;
+import me.dery.deventos.enums.eventos.EventStopReason;
 import me.dery.deventos.exceptions.EventoException;
 import me.dery.deventos.integrations.SimpleClansAPI;
-import me.dery.deventos.objects.Evento;
 import me.dery.deventos.pluginlisteners.DEPlayerLoseEvent;
 import me.dery.deventos.pluginlisteners.DEPlayerWinEvent;
 import me.dery.deventos.utils.ItemStackUtils;
 import me.dery.deventos.utils.LocationUtils;
 
-public class EventosStateManager {
+public class EventsStateManager {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
 	private final ListenersManager listenersManager;
 
-	public EventosStateManager(DEventos instance) {
+	public EventsStateManager(DEventos instance) {
 
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
+		eventsManager = instance.getEventosManager();
 		listenersManager = instance.getListenersManager();
 
 	}
 
-	public void startEvento(Evento evento) {
+	public void startEvento(Event event) {
 
-		listenersManager.registerListeners(evento);
+		listenersManager.registerListeners(event);
 
-		eventosManager.getEmAndamento().add(evento);
+		eventsManager.getEmAndamento().add(event);
 
-		evento.setEventoState(EventoState.INICIANDO);
+		event.setEventoState(EventState.INICIANDO);
 
-		evento.getTasks().add(new BukkitRunnable() {
+		event.getTasks().add(new BukkitRunnable() {
 
-			FileConfiguration config = eventosManager.getEventoConfig(evento);
+			FileConfiguration config = eventsManager.getEventoConfig(event);
 
-			int anuncios = config.getInt(EventoProperty.ANUNCIOS.keyInConfig);
+			int anuncios = config.getInt(EventProperty.ANNOUNCEMENTS.keyInConfig);
 
 			@Override
 			public void run() {
 
 				if (anuncios > 0) {
 					String msg = config.getStringList(
-						EventoProperty.MSGEVENTOINICIANDO.keyInConfig).stream().map(
+						EventProperty.MSGEVENTSTARTING.keyInConfig).stream().map(
 							s -> s.replace("&", "§")
-								.replace("{tempo}", (anuncios * evento.getTAnuncios()) + "")
+								.replace("{tempo}", (anuncios * event.getTAnuncios()) + "")
 								.replace("{anuncios}", anuncios + "")
-								.replace("{evento}", evento.getNome() + "")
-								.replace("{minplayers}", evento.getMinPlayers() + "")
+								.replace("{evento}", event.getNome() + "")
+								.replace("{minplayers}", event.getMinPlayers() + "")
 								.replace("{maxplayers}",
-									(evento.getMaxPlayers() == 0 ? "sem limite" : evento.getMaxPlayers() + ""))
-								.replace("{premio}", evento.getPremioFormatado())
-								.replace("{players}", evento.getPlayers().size() + ""))
+									(event.getMaxPlayers() == 0 ? "sem limite" : event.getMaxPlayers() + ""))
+								.replace("{premio}", event.getPremioFormatado())
+								.replace("{players}", event.getPlayers().size() + ""))
 						.collect(Collectors.joining("\n"));
 
 					Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(msg));
@@ -86,7 +86,7 @@ public class EventosStateManager {
 				} else {
 					this.cancel();
 
-					if (evento.getPlayers().size() >= evento.getMinPlayers()) {
+					if (event.getPlayers().size() >= event.getMinPlayers()) {
 
 						LocationUtils locationUtils = instance.getLocationUtils();
 						ItemStackUtils itemStackUtils = instance.getItemStackUtils();
@@ -94,20 +94,20 @@ public class EventosStateManager {
 						DBManager dbManager = instance.getDBManager();
 
 						config.getStringList(
-							EventoProperty.COMANDOSAOINICIAR.keyInConfig).forEach(
+							EventProperty.COMMANDSONSTART.keyInConfig).forEach(
 								cmd -> Bukkit.getServer().dispatchCommand(
 									Bukkit.getServer().getConsoleSender(), cmd));
 
-						evento.setEventoState(EventoState.EMANDAMENTO);
+						event.setEventoState(EventState.EMANDAMENTO);
 
 						ConfigurationSection bausSection =
-							config.getConfigurationSection(EventoProperty.BAUS.keyInConfig);
+							config.getConfigurationSection(EventProperty.CHESTS.keyInConfig);
 						if (bausSection != null)
 							bausSection.getKeys(false).forEach(bau -> {
 
 								Location loc = locationUtils.deserializeLocation(
 									config.getString(
-										EventoProperty.BAUS.keyInConfig
+										EventProperty.CHESTS.keyInConfig
 											+ "."
 											+ bau
 											+ ".Location"));
@@ -117,7 +117,7 @@ public class EventosStateManager {
 									.getState()).getInventory();
 
 								for (String item : config.getStringList(
-									EventoProperty.BAUS.keyInConfig
+									EventProperty.CHESTS.keyInConfig
 										+ "."
 										+ bau
 										+ ".Items")) {
@@ -128,18 +128,18 @@ public class EventosStateManager {
 								}
 							});
 
-						Location spawnLocation = locationUtils.deserializeLocation(evento.getSpawn());
-						for (String p : evento.getPlayers()) {
+						Location spawnLocation = locationUtils.deserializeLocation(event.getSpawn());
+						for (String p : event.getPlayers()) {
 							Player player = Bukkit.getServer().getPlayer(p);
 
 							player.teleport(spawnLocation);
 							player.playSound(player.getLocation(), Sound.LEVEL_UP, 5.0F, 1.0F);
 
-							if (evento.desativarFF() && sc != null)
+							if (event.desativarFF() && sc != null)
 								sc.disableFriendlyFire(player);
 
 							config.getStringList(
-								EventoProperty.EFEITOSAOINICIAR.keyInConfig).forEach(efeito -> {
+								EventProperty.EFFECTSONSTART.keyInConfig).forEach(efeito -> {
 									String[] partes = efeito.split(" ");
 									player.addPotionEffect(new PotionEffect(PotionEffectType.getByName(
 										itemStackUtils.traduzirPocao(partes[0])),
@@ -150,44 +150,44 @@ public class EventosStateManager {
 						}
 
 						String msg = config.getStringList(
-							EventoProperty.MSGEVENTOINICIADO.keyInConfig).stream().map(
-								s -> s.replace("&", "§").replace("{evento}", evento.getNome())
-									.replace("{players}", evento.getPlayers().size() + "")
-									.replace("{premio}", evento.getPremioFormatado()))
+							EventProperty.MSGEVENTSTARTED.keyInConfig).stream().map(
+								s -> s.replace("&", "§").replace("{evento}", event.getNome())
+									.replace("{players}", event.getPlayers().size() + "")
+									.replace("{premio}", event.getPremioFormatado()))
 							.collect(Collectors.joining("\n"));
 
 						for (Player on : Bukkit.getOnlinePlayers())
 							on.sendMessage(msg);
 
-						if (evento.getTAcabar() > 0) {
-							evento.getTasks().add(new BukkitRunnable() {
+						if (event.getTAcabar() > 0) {
+							event.getTasks().add(new BukkitRunnable() {
 
 								@Override
 								public void run() {
 									try {
-										stopEventoWithoutWinner(evento, EventoStopReason.TEMPOATINGIDO);
+										stopEventoWithoutWinner(event, EventStopReason.TEMPOATINGIDO);
 									} catch (EventoException e) {
 										e.printStackTrace();
 									}
 								}
 
-							}.runTaskLater(instance, evento.getTAcabar() * 20 * 60));
+							}.runTaskLater(instance, event.getTAcabar() * 20 * 60));
 						}
 
 						for (String s : config.getConfigurationSection("Avisos_Evento").getKeys(false)) {
 
 							String aviso = config.getStringList("Avisos_Evento." + s).stream()
 								.map(avisos -> avisos.replace("&", "§")
-									.replace("{evento}", evento.getNome())
-									.replace("{players}", evento.getPlayers().size() + "")
-									.replace("{premio}", evento.getPremioFormatado()))
+									.replace("{evento}", event.getNome())
+									.replace("{players}", event.getPlayers().size() + "")
+									.replace("{premio}", event.getPremioFormatado()))
 								.collect(Collectors.joining("\n"));
 
-							evento.getTasks().add(new BukkitRunnable() {
+							event.getTasks().add(new BukkitRunnable() {
 
 								@Override
 								public void run() {
-									evento.getPlayers().forEach(
+									event.getPlayers().forEach(
 										p -> Bukkit.getServer().getPlayer(p).sendMessage(aviso));
 								}
 							}.runTaskLater(instance, Integer.parseInt(s) * 20));
@@ -196,7 +196,7 @@ public class EventosStateManager {
 
 					} else {
 						try {
-							stopEventoWithoutWinner(evento, EventoStopReason.POUCOSPLAYERS);
+							stopEventoWithoutWinner(event, EventStopReason.POUCOSPLAYERS);
 						} catch (EventoException e) {
 							e.printStackTrace();
 						}
@@ -205,28 +205,28 @@ public class EventosStateManager {
 
 			}
 
-		}.runTaskTimer(instance, 0, evento.getTAnuncios() * 20));
+		}.runTaskTimer(instance, 0, event.getTAnuncios() * 20));
 
 	}
 
-	public void stopEventoWithoutWinner(Evento evento, EventoStopReason reason) throws EventoException {
+	public void stopEventoWithoutWinner(Event event, EventStopReason reason) throws EventoException {
 
-		eventosManager.getEmAndamento().remove(evento);
+		eventsManager.getEmAndamento().remove(event);
 
-		listenersManager.unregisterListeners(evento);
+		listenersManager.unregisterListeners(event);
 
-		evento.setEventoState(EventoState.FECHADO);
+		event.setEventoState(EventState.FECHADO);
 
-		FileConfiguration config = eventosManager.getEventoConfig(evento);
+		FileConfiguration config = eventsManager.getEventoConfig(event);
 
 		if (reason != null) {
 
-			String msg = config.getStringList(EventoProperty.MSGEVENTOCANCELADO.keyInConfig)
+			String msg = config.getStringList(EventProperty.MSGEVENTCANCELLED.keyInConfig)
 				.stream()
-				.map(s -> s.replace("&", "§").replace("{evento}", evento.getNome())
+				.map(s -> s.replace("&", "§").replace("{evento}", event.getNome())
 					.replace("{motivo}", instance.getConfig().getString("Motivos." + reason.propertyInConfig))
-					.replace("{players}", evento.getPlayers().size() + "")
-					.replace("{premio}", evento.getPremioFormatado()))
+					.replace("{players}", event.getPlayers().size() + "")
+					.replace("{premio}", event.getPremioFormatado()))
 				.collect(Collectors.joining("\n"));
 
 			for (Player on : Bukkit.getOnlinePlayers())
@@ -235,30 +235,30 @@ public class EventosStateManager {
 
 		LocationUtils locationUtils = instance.getLocationUtils();
 
-		Iterator<String> players = evento.getPlayers().iterator();
+		Iterator<String> players = event.getPlayers().iterator();
 		while (players.hasNext()) {
 			String p = players.next();
 			players.remove();
-			eventosManager.removePlayerFromEvent(p, evento, null, false);
+			eventsManager.removePlayerFromEvent(p, event, null, false);
 		}
 
-		players = evento.getEspectadores().iterator();
+		players = event.getEspectadores().iterator();
 		while (players.hasNext()) {
 			String p = players.next();
 			players.remove();
-			eventosManager.removePlayerFromEvent(p, evento, null, false);
+			eventsManager.removePlayerFromEvent(p, event, null, false);
 		}
 
-		for (BukkitTask task : evento.getTasks())
+		for (BukkitTask task : event.getTasks())
 			task.cancel();
-		evento.getTasks().clear();
+		event.getTasks().clear();
 
-		ConfigurationSection bausSection = config.getConfigurationSection(EventoProperty.BAUS.keyInConfig);
+		ConfigurationSection bausSection = config.getConfigurationSection(EventProperty.CHESTS.keyInConfig);
 		if (bausSection != null)
 			bausSection.getKeys(false).forEach(bau -> {
 
 				Location loc = locationUtils.deserializeLocation(
-					config.getString(EventoProperty.BAUS.keyInConfig + "." + bau + ".Location"));
+					config.getString(EventProperty.CHESTS.keyInConfig + "." + bau + ".Location"));
 
 				if (loc.getBlock().getType() == Material.CHEST) {
 					((Chest) loc.getBlock().getState()).getInventory().clear();
@@ -269,49 +269,49 @@ public class EventosStateManager {
 
 	}
 
-	public void stopEventoWithWinner(Evento evento, Player winner)
+	public void stopEventoWithWinner(Event event, Player winner)
 		throws IOException, InvalidConfigurationException, EventoException {
 
-		FileConfiguration config = eventosManager.getEventoConfig(evento);
+		FileConfiguration config = eventsManager.getEventoConfig(event);
 
-		String msg = config.getStringList(EventoProperty.MSGVENCEDOR.keyInConfig).stream()
-			.map(s -> s.replace("&", "§").replace("{evento}", evento.getNome())
+		String msg = config.getStringList(EventProperty.MSGWINNER.keyInConfig).stream()
+			.map(s -> s.replace("&", "§").replace("{evento}", event.getNome())
 				.replace("{player}", winner.getName())
-				.replace("{players}", evento.getPlayers().size() + "")
-				.replace("{premio}", evento.getPremioFormatado()))
+				.replace("{players}", event.getPlayers().size() + "")
+				.replace("{premio}", event.getPremioFormatado()))
 			.collect(Collectors.joining("\n"));
 
 		for (Player on : Bukkit.getOnlinePlayers())
 			on.sendMessage(msg);
 
-		evento.setLastWinner(winner.getName());
+		event.setLastWinner(winner.getName());
 
 		DBManager dbManager = instance.getDBManager();
 
 		dbManager.changePlayerStatus(winner.getName(), 1, 0, 0); // Add vitoria
 
 		String winnerName = winner.getName();
-		for (String p : evento.getPlayers()) {
+		for (String p : event.getPlayers()) {
 			if (!winnerName.equalsIgnoreCase(p)) {
 				Player player = Bukkit.getServer().getPlayer(p);
 				dbManager.changePlayerStatus(p, 0, 0, 1); // Add derrota
 
-				DEPlayerLoseEvent bukkitEvent = new DEPlayerLoseEvent(player, evento);
+				DEPlayerLoseEvent bukkitEvent = new DEPlayerLoseEvent(player, event);
 				Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
 			}
 		}
 
-		instance.getEconomy().depositPlayer(winner.getName(), evento.getPremio());
+		instance.getEconomy().depositPlayer(winner.getName(), event.getPremio());
 
-		config.getStringList(EventoProperty.COMANDOSVENCEDOR.keyInConfig)
+		config.getStringList(EventProperty.COMMANDSWINNER.keyInConfig)
 			.forEach(cmd -> instance.getServer().dispatchCommand(
 				instance.getServer().getConsoleSender(),
 				cmd.replace("{player}", winner.getName()).replace("/", "")));
 
-		DEPlayerWinEvent bukkitEvent = new DEPlayerWinEvent(winner, evento);
+		DEPlayerWinEvent bukkitEvent = new DEPlayerWinEvent(winner, event);
 		instance.getServer().getPluginManager().callEvent(bukkitEvent);
 
-		stopEventoWithoutWinner(evento, null);
+		stopEventoWithoutWinner(event, null);
 
 	}
 

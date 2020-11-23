@@ -6,11 +6,11 @@ import org.bukkit.command.CommandSender;
 
 import me.dery.deventos.DEventos;
 
-public class ComandoEventos implements CommandExecutor {
+public class CommandEvents implements CommandExecutor {
 
 	private final DEventos instance;
 
-	public ComandoEventos(DEventos instance) {
+	public CommandEvents(DEventos instance) {
 
 		this.instance = instance;
 

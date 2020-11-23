@@ -7,14 +7,14 @@ import java.util.regex.Pattern;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.enums.eventos.EventoState;
-import me.dery.deventos.managers.EventosManager;
+import me.dery.deventos.enums.events.EventState;
+import me.dery.deventos.managers.EventsManager;
 
 public class CheckStart extends BukkitRunnable {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosmanager;
+	private final EventsManager eventosmanager;
 
 	private final Pattern pattern;
 
@@ -38,8 +38,8 @@ public class CheckStart extends BukkitRunnable {
 
 		Calendar c = new GregorianCalendar();
 
-		for (String eventos : instance.getConfig().getStringList("Config.Auto_Start.Eventos")) {
-			String[] autostart = eventos.split("->");
+		for (String events : instance.getConfig().getStringList("Config.Auto_Start.Eventos")) {
+			String[] autostart = events.split("->");
 			String evento = autostart[0];
 			String tempo = autostart[1];
 
@@ -70,7 +70,7 @@ public class CheckStart extends BukkitRunnable {
 			if (isNum(hoursAndMinutes[0]) && isNum(hoursAndMinutes[1])
 				&& c.get(Calendar.HOUR_OF_DAY) == Integer.valueOf(hoursAndMinutes[0])
 				&& c.get(Calendar.MINUTE) == Integer.valueOf(hoursAndMinutes[1])
-				&& eventosmanager.getEventoByName(evento).getEventoState() != EventoState.EMANDAMENTO)
+				&& eventosmanager.getEventoByName(evento).getEventoState() != EventState.EMANDAMENTO)
 
 				instance.getServer().dispatchCommand(instance.getServer().getConsoleSender(),
 					"evento iniciar " + evento);

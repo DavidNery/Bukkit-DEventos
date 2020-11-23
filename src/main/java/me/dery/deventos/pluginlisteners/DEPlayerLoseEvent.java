@@ -1,27 +1,25 @@
 package me.dery.deventos.pluginlisteners;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.dery.deventos.objects.Evento;
-
-public class DEPlayerLoseEvent extends Event {
+public class DEPlayerLoseEvent extends org.bukkit.event.Event {
 
 	private static final HandlerList handlers = new HandlerList();
 
-	private Evento evento;
+	private Event event;
 
 	private Player p;
 
-	public DEPlayerLoseEvent(Player p, Evento evento) {
+	public DEPlayerLoseEvent(Player p, Event event) {
 		this.p = p;
-		this.evento = evento;
+		this.event = event;
 	}
 
 	public Player getPlayer() { return p; }
 
-	public Evento getEvento() { return evento; }
+	public Event getEvento() { return event; }
 
 	public HandlerList getHandlers() { return handlers; }
 

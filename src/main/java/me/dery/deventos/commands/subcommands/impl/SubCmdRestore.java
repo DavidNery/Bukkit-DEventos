@@ -10,9 +10,9 @@ import me.dery.deventos.commands.subcommands.abstracts.PlayerSubCommand;
 import me.dery.deventos.enums.subcommands.SubCommands;
 import me.dery.deventos.utils.InventoryUtils;
 
-public class SubCmdRecuperar extends PlayerSubCommand {
+public class SubCmdRestore extends PlayerSubCommand {
 
-	public SubCmdRecuperar(SubCommands type) { super(type); }
+	public SubCmdRestore(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {

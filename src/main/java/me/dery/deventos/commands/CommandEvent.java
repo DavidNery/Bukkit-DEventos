@@ -12,16 +12,16 @@ import org.bukkit.entity.Player;
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.PlayerSubCommand;
 import me.dery.deventos.commands.subcommands.abstracts.SubCommand;
-import me.dery.deventos.commands.subcommands.impl.SubCmdEntrar;
+import me.dery.deventos.commands.subcommands.impl.SubCmdJoin;
 import me.dery.deventos.enums.subcommands.SubCommands;
 
-public class ComandoEvento implements CommandExecutor {
+public class CommandEvent implements CommandExecutor {
 
 	private final DEventos instance;
 
 	private final SimpleDateFormat sdf;
 
-	public ComandoEvento(DEventos instance) {
+	public CommandEvent(DEventos instance) {
 
 		this.instance = instance;
 
@@ -38,7 +38,7 @@ public class ComandoEvento implements CommandExecutor {
 		SubCommand subCommand;
 
 		if (args.length == 0) {
-			subCommand = new SubCmdEntrar(SubCommands.ENTRAR);
+			subCommand = new SubCmdJoin(SubCommands.ENTRAR);
 		} else {
 			SubCommands subCommandType;
 			try {

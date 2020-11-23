@@ -12,30 +12,30 @@ import org.bukkit.scheduler.BukkitTask;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.objects.Event;
 
 public class RunnableManager {
 
-	private final Map<Evento, BukkitTask> blockTasks;
+	private final Map<Event, BukkitTask> blockTasks;
 
 	public RunnableManager() { blockTasks = new HashMap<>(); }
 
-	public void registerBlockTask(DEventos instance, EventosStateManager eventosStateManager, Evento evento) {
-		blockTasks.put(evento, new BukkitRunnable() {
+	public void registerBlockTask(DEventos instance, EventsStateManager eventsStateManager, Event event) {
+		blockTasks.put(event, new BukkitRunnable() {
 			@Override
 			public void run() {
 
-				for (String player : evento.getPlayers()) {
+				for (String player : event.getPlayers()) {
 					Player bukkitPlayer = instance.getServer().getPlayer(player);
-					if (bukkitPlayer.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == evento
+					if (bukkitPlayer.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == event
 						.getBlock()) {
 						try {
-							eventosStateManager.stopEventoWithWinner(evento, bukkitPlayer);
+							eventsStateManager.stopEventoWithWinner(event, bukkitPlayer);
 						} catch (IOException | InvalidConfigurationException | EventoException e) {
 							e.printStackTrace();
 						}
 
-						unregisterBlockTask(evento);
+						unregisterBlockTask(event);
 						break;
 					}
 				}
@@ -44,9 +44,9 @@ public class RunnableManager {
 		}.runTaskTimerAsynchronously(instance, 10, 10));
 	}
 
-	public void unregisterBlockTask(Evento evento) {
-		blockTasks.get(evento).cancel();
-		blockTasks.remove(evento);
+	public void unregisterBlockTask(Event event) {
+		blockTasks.get(event).cancel();
+		blockTasks.remove(event);
 	}
 
 }

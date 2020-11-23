@@ -2,21 +2,21 @@ package me.dery.deventos.commands.subcommands.impl;
 
 import java.io.IOException;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.PlayerSubCommand;
-import me.dery.deventos.enums.eventos.EventoState;
+import me.dery.deventos.enums.events.EventState;
 import me.dery.deventos.enums.subcommands.SubCommands;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 import me.dery.deventos.utils.InventoryUtils;
 
-public class SubCmdEspectar extends PlayerSubCommand {
+public class SubCmdEspectate extends PlayerSubCommand {
 
-	public SubCmdEspectar(SubCommands type) { super(type); }
+	public SubCmdEspectate(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {
@@ -29,47 +29,47 @@ public class SubCmdEspectar extends PlayerSubCommand {
 			return true;
 		}
 
-		EventosManager eventosManager = instance.getEventosManager();
-		Evento evento;
+		EventsManager eventsManager = instance.getEventosManager();
+		Event event;
 
 		if (args.length == 1) {
-			if (eventosManager.getEmAndamento().size() > 1) {
+			if (eventsManager.getEmAndamento().size() > 1) {
 				sendArgsError(instance, sender);
 				return true;
 			} else {
-				evento = eventosManager.getEmAndamento().get(0);
+				event = eventsManager.getEmAndamento().get(0);
 			}
 		} else {
-			evento = eventosManager.getEventoByName(args[1]);
+			event = eventsManager.getEventoByName(args[1]);
 
-			if (evento == null) {
+			if (event == null) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido")
 					.replace("&", "§").replace("{evento}", args[1]));
 				return true;
 			}
 		}
 
-		if (eventosManager.getEventoByPlayer(sender) != null || eventosManager.getEventoByEspectador(sender) != null) {
+		if (eventsManager.getEventoByPlayer(sender) != null || eventsManager.getEventoByEspectador(sender) != null) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Ja_Esta_Em_Um_Evento").replace("&", "§"));
 			return true;
 
-		} else if (evento.getEventoState() == EventoState.FECHADO) {
+		} else if (event.getEventoState() == EventState.FECHADO) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Nao_Esta_Aberto").replace("&", "§")
-				.replace("{evento}", evento.getNome()));
+				.replace("{evento}", event.getNome()));
 			return true;
 
-		} else if (!sender.hasPermission(evento.getPermissaoEspectar()) && !sender.hasPermission("deventos.admin")) {
+		} else if (!sender.hasPermission(event.getPermissaoEspectar()) && !sender.hasPermission("deventos.admin")) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Sem_Permissao_Espectar")
-				.replace("&", "§").replace("{evento}", evento.getNome()));
+				.replace("&", "§").replace("{evento}", event.getNome()));
 			return true;
 
-		} else if (!evento.ativarEspectador()) {
+		} else if (!event.ativarEspectador()) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Espectador_Desativado")
-				.replace("&", "§").replace("{evento}", evento.getNome()));
+				.replace("&", "§").replace("{evento}", event.getNome()));
 			return true;
 
 		} else {
@@ -81,7 +81,7 @@ public class SubCmdEspectar extends PlayerSubCommand {
 			}
 
 			try {
-				eventosManager.addPlayerInEspectadorEvent((Player) sender, evento, true);
+				eventsManager.addPlayerInEspectadorEvent((Player) sender, event, true);
 			} catch (EventoException e) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro." + e.getError()).replace("&", "§"));
 				return true;

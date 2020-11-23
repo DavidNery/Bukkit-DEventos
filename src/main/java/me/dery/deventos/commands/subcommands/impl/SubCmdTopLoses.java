@@ -10,9 +10,9 @@ import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.TopSubCommand;
 import me.dery.deventos.enums.subcommands.SubCommands;
 
-public class SubCmdTopDerrotas extends TopSubCommand {
+public class SubCmdTopLoses extends TopSubCommand {
 
-	public SubCmdTopDerrotas(SubCommands type) { super(type); }
+	public SubCmdTopLoses(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {
@@ -20,7 +20,7 @@ public class SubCmdTopDerrotas extends TopSubCommand {
 		if (sender.hasPermission("deventos.player") || sender.hasPermission("deventos." + type.permissao)
 			|| sender.hasPermission("deventos.admin")) {
 
-			LinkedHashMap<String, Integer> topderrotas = instance.getDBManager().getTopDerrotas();
+			LinkedHashMap<String, Integer> topderrotas = instance.getDBManager().getTopLoses();
 
 			if (topderrotas == null || topderrotas.size() == 0) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.TOP_Derrotas_Nao_Definido")

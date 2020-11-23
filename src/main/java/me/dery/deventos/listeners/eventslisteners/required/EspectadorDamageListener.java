@@ -6,14 +6,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 
 public class EspectadorDamageListener implements Listener {
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
-	public EspectadorDamageListener(DEventos instance) { eventosManager = instance.getEventosManager(); }
+	public EspectadorDamageListener(DEventos instance) { eventsManager = instance.getEventosManager(); }
 
 	@EventHandler(ignoreCancelled = true)
 	public void espectadorDamage(EntityDamageEvent e) {
@@ -21,8 +21,8 @@ public class EspectadorDamageListener implements Listener {
 			if (e.getEntity().hasPermission("deventos.admin"))
 				return;
 
-			for (Evento evento : eventosManager.getEmAndamento()) {
-				if (evento.getEspectadores().contains(e.getEntity().getName())) {
+			for (Event event : eventsManager.getEmAndamento()) {
+				if (event.getEspectadores().contains(e.getEntity().getName())) {
 					e.setCancelled(true);
 					break;
 				}

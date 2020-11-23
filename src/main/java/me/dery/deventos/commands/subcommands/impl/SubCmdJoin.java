@@ -1,20 +1,20 @@
 package me.dery.deventos.commands.subcommands.impl;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.PlayerSubCommand;
-import me.dery.deventos.enums.eventos.EventoState;
+import me.dery.deventos.enums.events.EventState;
 import me.dery.deventos.enums.subcommands.SubCommands;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 import me.dery.deventos.utils.InventoryUtils;
 
-public class SubCmdEntrar extends PlayerSubCommand {
+public class SubCmdJoin extends PlayerSubCommand {
 
-	public SubCmdEntrar(SubCommands type) { super(type); }
+	public SubCmdJoin(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {
@@ -26,20 +26,20 @@ public class SubCmdEntrar extends PlayerSubCommand {
 			return true;
 		}
 
-		EventosManager eventosManager = instance.getEventosManager();
-		Evento evento;
+		EventsManager eventsManager = instance.getEventosManager();
+		Event event;
 
 		if (args.length <= 1) {
-			if (eventosManager.getEmAndamento().size() == 1) {
-				evento = eventosManager.getEmAndamento().get(0);
+			if (eventsManager.getEmAndamento().size() == 1) {
+				event = eventsManager.getEmAndamento().get(0);
 			} else {
 				sendArgsError(instance, sender);
 				return true;
 			}
 		} else {
-			evento = eventosManager.getEventoByName(args[1]);
+			event = eventsManager.getEventoByName(args[1]);
 
-			if (evento == null) {
+			if (event == null) {
 
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido")
 					.replace("&", "§").replace("{evento}", args[1]));
@@ -48,46 +48,46 @@ public class SubCmdEntrar extends PlayerSubCommand {
 			}
 		}
 
-		if (eventosManager.getEventoByPlayer(sender) != null) {
+		if (eventsManager.getEventoByPlayer(sender) != null) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Ja_Esta_Em_Um_Evento").replace("&", "§"));
 			return true;
 
-		} else if (evento.getEventoState() != EventoState.INICIANDO) {
+		} else if (event.getEventoState() != EventState.INICIANDO) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Nao_Esta_Aberto")
-				.replace("&", "§").replace("{evento}", evento.getNome()));
+				.replace("&", "§").replace("{evento}", event.getNome()));
 			return true;
 
-		} else if (!sender.hasPermission(evento.getPermissao()) && !sender.hasPermission("deventos.admin")) {
+		} else if (!sender.hasPermission(event.getPermissao()) && !sender.hasPermission("deventos.admin")) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Sem_Permissao_Entrar")
-				.replace("&", "§").replace("{evento}", evento.getNome()));
+				.replace("&", "§").replace("{evento}", event.getNome()));
 			return true;
 
-		} else if (eventosManager.isBan(sender.getName(), evento)) {
+		} else if (eventsManager.isBan(sender.getName(), event)) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Esta_Banido").replace("&", "§"));
 			return true;
 
-		} else if (evento.requireInvVazio() && !inventoryUtils.isVazio((Player) sender)) {
+		} else if (event.requireInvVazio() && !inventoryUtils.isVazio((Player) sender)) {
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Inv_Vazio")
-				.replace("&", "§").replace("{evento}", evento.getNome()));
+				.replace("&", "§").replace("{evento}", event.getNome()));
 			return true;
 
-		} else if (evento.getMaxPlayers() != 0 && evento.getPlayers().size() >= evento.getMaxPlayers()) {
-			if (!evento.byPassMax() || !sender.hasPermission(evento.getPermissaoByPass())) {
+		} else if (event.getMaxPlayers() != 0 && event.getPlayers().size() >= event.getMaxPlayers()) {
+			if (!event.byPassMax() || !sender.hasPermission(event.getPermissaoByPass())) {
 
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Lotato")
-					.replace("&", "§").replace("{evento}", evento.getNome()));
+					.replace("&", "§").replace("{evento}", event.getNome()));
 				return true;
 
 			}
 		}
 
 		try {
-			eventosManager.addPlayerInEvent((Player) sender, evento);
+			eventsManager.addPlayerInEvent((Player) sender, event);
 		} catch (EventoException e) {
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro." + e.getError()).replace("&", "§"));
 		}

@@ -1,17 +1,17 @@
 package me.dery.deventos.commands.subcommands.impl;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.SubCommand;
-import me.dery.deventos.enums.eventos.EventoState;
+import me.dery.deventos.enums.events.EventState;
 import me.dery.deventos.enums.subcommands.SubCommands;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 
-public class SubCmdIniciar extends SubCommand {
+public class SubCmdStart extends SubCommand {
 
-	public SubCmdIniciar(SubCommands type) { super(type); }
+	public SubCmdStart(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {
@@ -23,32 +23,32 @@ public class SubCmdIniciar extends SubCommand {
 				return true;
 			}
 
-			EventosManager eventosManager = instance.getEventosManager();
+			EventsManager eventsManager = instance.getEventosManager();
 
 			if (!instance.getConfig().getBoolean("Config.Permitir_Mais_De_Um_Evento")) {
-				if (eventosManager.getEmAndamento().size() > 0) {
+				if (eventsManager.getEmAndamento().size() > 0) {
 					sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Ja_Existe_Em_Andamento")
 						.replace("&", "§"));
 					return true;
 				}
 			}
 
-			Evento evento = eventosManager.getEventoByName(args[1]);
+			Event event = eventsManager.getEventoByName(args[1]);
 
-			if (evento == null) {
+			if (event == null) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido")
 					.replace("&", "§").replace("{evento}", args[1]));
 				return true;
-			} else if (evento.getEventoState() != EventoState.FECHADO) {
+			} else if (event.getEventoState() != EventState.FECHADO) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Ja_Esta_Aberto")
-					.replace("&", "§").replace("{evento}", evento.getNome()));
+					.replace("&", "§").replace("{evento}", event.getNome()));
 				return true;
 			}
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Iniciou").replace("&", "§")
-				.replace("{evento}", evento.getNome()));
+				.replace("{evento}", event.getNome()));
 
-			instance.getEventosStateManager().startEvento(evento);
+			instance.getEventosStateManager().startEvento(event);
 		} else {
 			sender.sendMessage(
 				instance.getConfig().getString("Mensagem.Erro.Sem_Permissao").replace("&", "§").replace("{1}",

@@ -82,15 +82,15 @@ public class SQLite implements IDataBase {
 
 	}
 
-	public void addNew(String player, int vitorias, int derrotas, int participacoes)
+	public void addNew(String player, int wins, int loses, int participations)
 					throws ClassNotFoundException, SQLException {
 
 		Class.forName("com.mysql.jdbc.Driver");
 
 		ps.setString(1, player);
-		ps.setInt(2, vitorias);
-		ps.setInt(3, derrotas);
-		ps.setInt(4, participacoes);
+		ps.setInt(2, wins);
+		ps.setInt(3, loses);
+		ps.setInt(4, participations);
 
 		ps.addBatch();
 
@@ -104,63 +104,63 @@ public class SQLite implements IDataBase {
 
 	}
 
-	public LinkedHashMap<String, Integer> getTOPVitorias(final int quantidade)
+	public LinkedHashMap<String, Integer> getTOPWins(final int amount)
 					throws ClassNotFoundException, SQLException {
 
 		Class.forName("org.sqlite.JDBC");
 
 		ps = connection.prepareStatement(
-						"SELECT * FROM eventos ORDER BY vitorias DESC LIMIT " + quantidade
+						"SELECT * FROM eventos ORDER BY vitorias DESC LIMIT " + amount
 		);
 
 		final ResultSet rs = ps.executeQuery();
 
-		final LinkedHashMap<String, Integer> topvitorias = new LinkedHashMap<>();
+		final LinkedHashMap<String, Integer> topwins = new LinkedHashMap<>();
 
 		while (rs.next())
-			topvitorias.put(rs.getString("player"), rs.getInt("vitorias"));
+			topwins.put(rs.getString("player"), rs.getInt("vitorias"));
 
-		return topvitorias;
+		return topwins;
 
 	}
 
-	public LinkedHashMap<String, Integer> getTOPParticipacoes(final int quantidade)
+	public LinkedHashMap<String, Integer> geTOPParticipations(final int amount)
 					throws ClassNotFoundException, SQLException {
 
 		Class.forName("org.sqlite.JDBC");
 
 		ps = connection.prepareStatement(
-						"SELECT * FROM eventos ORDER BY participacoes DESC LIMIT " + quantidade
+						"SELECT * FROM eventos ORDER BY participacoes DESC LIMIT " + amount
 		);
 
 		final ResultSet rs = ps.executeQuery();
 
-		final LinkedHashMap<String, Integer> topparticipacoes = new LinkedHashMap<>();
+		final LinkedHashMap<String, Integer> topparticipations = new LinkedHashMap<>();
 
 		while (rs.next())
-			topparticipacoes.put(rs.getString("player"), rs.getInt("participacoes"));
+			topparticipations.put(rs.getString("player"), rs.getInt("participacoes"));
 
-		return topparticipacoes;
+		return topparticipations;
 
 	}
 
-	public LinkedHashMap<String, Integer> getTOPDerrotas(final int quantidade)
+	public LinkedHashMap<String, Integer> getTOPLoses(final int amount)
 					throws ClassNotFoundException, SQLException {
 
 		Class.forName("org.sqlite.JDBC");
 
 		ps = connection.prepareStatement(
-						"SELECT * FROM eventos ORDER BY derrotas DESC LIMIT " + quantidade
+						"SELECT * FROM eventos ORDER BY derrotas DESC LIMIT " + amount
 		);
 
 		final ResultSet rs = ps.executeQuery();
 
-		final LinkedHashMap<String, Integer> topderrotas = new LinkedHashMap<>();
+		final LinkedHashMap<String, Integer> toploses = new LinkedHashMap<>();
 
 		while (rs.next())
-			topderrotas.put(rs.getString("player"), rs.getInt("derrotas"));
+			toploses.put(rs.getString("player"), rs.getInt("derrotas"));
 
-		return topderrotas;
+		return toploses;
 
 	}
 

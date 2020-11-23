@@ -1,36 +1,36 @@
 package me.dery.deventos.enums.subcommands;
 
 import me.dery.deventos.commands.subcommands.impl.SubCmdDelChest;
-import me.dery.deventos.commands.subcommands.impl.SubCmdEntrar;
-import me.dery.deventos.commands.subcommands.impl.SubCmdEspectar;
+import me.dery.deventos.commands.subcommands.impl.SubCmdJoin;
+import me.dery.deventos.commands.subcommands.impl.SubCmdEspectate;
 import me.dery.deventos.commands.subcommands.impl.SubCmdInfo;
-import me.dery.deventos.commands.subcommands.impl.SubCmdIniciar;
-import me.dery.deventos.commands.subcommands.impl.SubCmdParar;
-import me.dery.deventos.commands.subcommands.impl.SubCmdRecuperar;
+import me.dery.deventos.commands.subcommands.impl.SubCmdStart;
+import me.dery.deventos.commands.subcommands.impl.SubCmdStop;
+import me.dery.deventos.commands.subcommands.impl.SubCmdRestore;
 import me.dery.deventos.commands.subcommands.impl.SubCmdReload;
-import me.dery.deventos.commands.subcommands.impl.SubCmdSair;
+import me.dery.deventos.commands.subcommands.impl.SubCmdQuit;
 import me.dery.deventos.commands.subcommands.impl.SubCmdSet;
 import me.dery.deventos.commands.subcommands.impl.SubCmdSetChest;
 import me.dery.deventos.commands.subcommands.impl.SubCmdToggleBan;
-import me.dery.deventos.commands.subcommands.impl.SubCmdTopDerrotas;
-import me.dery.deventos.commands.subcommands.impl.SubCmdTopParticipacoes;
-import me.dery.deventos.commands.subcommands.impl.SubCmdTopVitorias;
+import me.dery.deventos.commands.subcommands.impl.SubCmdTopLoses;
+import me.dery.deventos.commands.subcommands.impl.SubCmdTopParticipations;
+import me.dery.deventos.commands.subcommands.impl.SubCmdTopWins;
 
 public enum SubCommands {
 
-	ENTRAR("Entrar", null, SubCmdEntrar.class),
-	SAIR(null, "sair", SubCmdSair.class),
-	ESPECTAR("Espectar", null, SubCmdEspectar.class),
-	RECUPERAR(null, null, SubCmdRecuperar.class),
+	ENTRAR("Entrar", null, SubCmdJoin.class),
+	SAIR(null, "sair", SubCmdQuit.class),
+	ESPECTAR("Espectar", null, SubCmdEspectate.class),
+	RECUPERAR(null, null, SubCmdRestore.class),
 
-	TOPVITORIAS(null, "topvitorias", SubCmdTopVitorias.class),
-	TOPDERROTAS(null, "topderrotas", SubCmdTopDerrotas.class),
-	TOPPARTICIPACOES(null, "topparticipacoes", SubCmdTopParticipacoes.class),
+	TOPVITORIAS(null, "topvitorias", SubCmdTopWins.class),
+	TOPDERROTAS(null, "topderrotas", SubCmdTopLoses.class),
+	TOPPARTICIPACOES(null, "topparticipacoes", SubCmdTopParticipations.class),
 
 	RELOAD(null, "reload", SubCmdReload.class),
 
-	INICIAR("Iniciar", "iniciar", SubCmdIniciar.class),
-	PARAR("Parar", "parar", SubCmdParar.class),
+	INICIAR("Iniciar", "iniciar", SubCmdStart.class),
+	PARAR("Parar", "parar", SubCmdStop.class),
 	INFO("Info", "info", SubCmdInfo.class),
 
 	BAN("Ban", "ban", SubCmdToggleBan.class),

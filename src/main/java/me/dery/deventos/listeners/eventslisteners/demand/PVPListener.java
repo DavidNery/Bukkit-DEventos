@@ -9,20 +9,20 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.enums.eventos.EventoState;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.enums.eventos.EventState;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 
 public class PVPListener implements Listener {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
 	public PVPListener(DEventos instance) {
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
+		eventsManager = instance.getEventosManager();
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -49,17 +49,17 @@ public class PVPListener implements Listener {
 			if (damager != null && damager.hasPermission("deventos.admin"))
 				return;
 
-			for (Evento evento : eventosManager.getEmAndamento()) {
-				if (evento.getPlayers().contains(player.getName())) {
+			for (Event event : eventsManager.getEmAndamento()) {
+				if (event.getPlayers().contains(player.getName())) {
 
 					if (damager != null) {
-						if (evento.desativarPvp()) {
+						if (event.desativarPvp()) {
 
 							e.setCancelled(true);
 							damager.sendMessage(instance.getConfig().getString("Mensagem.Erro.No_PvP")
 								.replace("&", "§"));
 
-						} else if (evento.getEventoState() == EventoState.INICIANDO) {
+						} else if (event.getEventoState() == EventState.INICIANDO) {
 
 							e.setCancelled(true);
 							damager.sendMessage(instance.getConfig().getString("Mensagem.Erro.PvP_Ainda_Nao_Ativo")
@@ -73,7 +73,7 @@ public class PVPListener implements Listener {
 
 					break;
 
-				} else if (damager != null && evento.getEspectadores().contains(damager.getName())) {
+				} else if (damager != null && event.getEspectadores().contains(damager.getName())) {
 
 					e.setCancelled(true);
 					damager.sendMessage(instance.getConfig().getString("Mensagem.Erro.No_PvP_Espectador")

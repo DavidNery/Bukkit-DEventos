@@ -10,10 +10,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.dery.deventos.enums.eventos.EventoProperty;
-import me.dery.deventos.enums.eventos.EventoState;
+import me.dery.deventos.enums.eventos.EventProperty;
+import me.dery.deventos.enums.eventos.EventState;
 
-public class Evento {
+public class Event {
 
 	private final File fileEvento;
 
@@ -34,57 +34,57 @@ public class Evento {
 
 	private List<BukkitTask> tasks;
 
-	private EventoState eventoState;
+	private EventState eventState;
 
 	private String lastWinner;
 
-	public Evento(File fileEvento) {
+	public Event(File fileEvento) {
 
 		this.fileEvento = fileEvento;
 
 		FileConfiguration fc = YamlConfiguration.loadConfiguration(fileEvento);
 
 		// Strings
-		nome = fc.getString(EventoProperty.NOME.keyInConfig);
-		if (fc.getBoolean(EventoProperty.DARTAG.keyInConfig))
-			tag = fc.getString(EventoProperty.TAG.keyInConfig).replace("&", "§");
+		nome = fc.getString(EventProperty.NOME.keyInConfig);
+		if (fc.getBoolean(EventProperty.GIVETAG.keyInConfig))
+			tag = fc.getString(EventProperty.TAG.keyInConfig).replace("&", "§");
 		else
 			tag = null;
-		permissao = fc.getString(EventoProperty.PERMISSAO.keyInConfig);
-		permissaoByPass = fc.getString(EventoProperty.PERMISSAOBYPASS.keyInConfig);
-		permissaoEspectar = fc.getString(EventoProperty.PERMISSAOESPECTAR.keyInConfig);
+		permissao = fc.getString(EventProperty.PERMISSION.keyInConfig);
+		permissaoByPass = fc.getString(EventProperty.PERMISSIONBYPASS.keyInConfig);
+		permissaoEspectar = fc.getString(EventProperty.PERMISSIONESPECTAR.keyInConfig);
 
 		// Strings (locations)
-		spawn = fc.getString(EventoProperty.SPAWN.keyInConfig);
-		lobby = fc.getString(EventoProperty.LOBBY.keyInConfig);
-		exit = fc.getString(EventoProperty.EXIT.keyInConfig);
-		espectador = fc.getString(EventoProperty.ESPECTADOR.keyInConfig);
+		spawn = fc.getString(EventProperty.SPAWN.keyInConfig);
+		lobby = fc.getString(EventProperty.LOBBY.keyInConfig);
+		exit = fc.getString(EventProperty.EXIT.keyInConfig);
+		espectador = fc.getString(EventProperty.ESPECTATOR.keyInConfig);
 
 		// Double
-		premio = fc.getDouble(EventoProperty.PREMIO.keyInConfig);
+		premio = fc.getDouble(EventProperty.PRIZE.keyInConfig);
 
 		// Booleans
-		desativarPvp = fc.getBoolean(EventoProperty.DESATIVARPVP.keyInConfig);
-		desativarDamage = fc.getBoolean(EventoProperty.DESATIVARDAMAGE.keyInConfig);
-		desativarFF = fc.getBoolean(EventoProperty.DESATIVARFF.keyInConfig);
-		requireInvVazio = fc.getBoolean(EventoProperty.INVVAZIO.keyInConfig);
-		byPassMax = fc.getBoolean(EventoProperty.ALLOWBYPASSMAXPLAYERS.keyInConfig);
-		ultimoVivoGanha = fc.getBoolean(EventoProperty.ULTIMOVIVOGANHA.keyInConfig);
-		ultimoEventoGanha = fc.getBoolean(EventoProperty.ULTIMOEVENTOGANHA.keyInConfig);
-		salvarInv = fc.getBoolean(EventoProperty.SALVARINV.keyInConfig);
-		ativarLobby = fc.getBoolean(EventoProperty.ATIVARLOBBY.keyInConfig);
-		ativarEspectador = fc.getBoolean(EventoProperty.ATIVARESPECTADOR.keyInConfig);
-		desativarFome = fc.getBoolean(EventoProperty.DESATIVARFOME.keyInConfig);
+		desativarPvp = fc.getBoolean(EventProperty.DISABLEPVP.keyInConfig);
+		desativarDamage = fc.getBoolean(EventProperty.DISABLEDAMAGE.keyInConfig);
+		desativarFF = fc.getBoolean(EventProperty.DISABLEFF.keyInConfig);
+		requireInvVazio = fc.getBoolean(EventProperty.EMPTYINV.keyInConfig);
+		byPassMax = fc.getBoolean(EventProperty.ALLOWBYPASSMAXPLAYERS.keyInConfig);
+		ultimoVivoGanha = fc.getBoolean(EventProperty.LASTALIVEWIN.keyInConfig);
+		ultimoEventoGanha = fc.getBoolean(EventProperty.LASTEVENTWIN.keyInConfig);
+		salvarInv = fc.getBoolean(EventProperty.SAVEINV.keyInConfig);
+		ativarLobby = fc.getBoolean(EventProperty.ENABLELOBBY.keyInConfig);
+		ativarEspectador = fc.getBoolean(EventProperty.ENABLEESPECTATOR.keyInConfig);
+		desativarFome = fc.getBoolean(EventProperty.DISABLEFOME.keyInConfig);
 
 		// Inteiros
-		tAnuncios = fc.getInt(EventoProperty.TEMPOANUNCIOS.keyInConfig);
-		minPlayers = fc.getInt(EventoProperty.MINPLAYERS.keyInConfig);
-		maxPlayers = fc.getInt(EventoProperty.MAXPLAYERS.keyInConfig);
-		tAcabar = fc.getInt(EventoProperty.TEMPOACABAREVENTO.keyInConfig);
+		tAnuncios = fc.getInt(EventProperty.ANNOUNCEMENTTIME.keyInConfig);
+		minPlayers = fc.getInt(EventProperty.MINPLAYERS.keyInConfig);
+		maxPlayers = fc.getInt(EventProperty.MAXPLAYERS.keyInConfig);
+		tAcabar = fc.getInt(EventProperty.EVENTSTOPTIME.keyInConfig);
 
 		// Material
-		if (fc.getBoolean(EventoProperty.PASSARBLOCO.keyInConfig))
-			block = Material.getMaterial(EventoProperty.BLOCOPASSAR.keyInConfig);
+		if (fc.getBoolean(EventProperty.WALKBLOCK.keyInConfig))
+			block = Material.getMaterial(EventProperty.BLOCKWALK.keyInConfig);
 		else
 			block = null;
 
@@ -94,9 +94,9 @@ public class Evento {
 		espectadores = new ArrayList<String>();
 		respawn = new ArrayList<String>();
 
-		eventoState = EventoState.FECHADO;
+		eventState = EventState.FECHADO;
 
-		lastWinner = fc.getString(EventoProperty.LASTWINNER.keyInConfig);
+		lastWinner = fc.getString(EventProperty.LASTWINNER.keyInConfig);
 
 	}
 
@@ -166,9 +166,9 @@ public class Evento {
 
 	public List<BukkitTask> getTasks() { return tasks; }
 
-	public void setEventoState(EventoState eventoState) { this.eventoState = eventoState; }
+	public void setEventoState(EventState eventState) { this.eventState = eventState; }
 
-	public EventoState getEventoState() { return eventoState; }
+	public EventState getEventoState() { return eventState; }
 
 	public void setLastWinner(String lastWinner) { this.lastWinner = lastWinner; }
 

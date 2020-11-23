@@ -9,18 +9,18 @@ import org.bukkit.entity.Player;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.PlayerSubCommand;
-import me.dery.deventos.enums.eventos.EventoState;
-import me.dery.deventos.enums.eventos.EventoStopReason;
+import me.dery.deventos.enums.events.EventState;
+import me.dery.deventos.enums.events.EventStopReason;
 import me.dery.deventos.enums.subcommands.SubCommands;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 import me.dery.deventos.pluginlisteners.DEPlayerQuitEvent;
 import me.dery.deventos.pluginlisteners.DEPlayerQuitEvent.QuitReason;
 
-public class SubCmdSair extends PlayerSubCommand {
+public class SubCmdQuit extends PlayerSubCommand {
 
-	public SubCmdSair(SubCommands type) { super(type); }
+	public SubCmdQuit(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {
@@ -28,40 +28,40 @@ public class SubCmdSair extends PlayerSubCommand {
 		if (sender.hasPermission("deventos.player") || sender.hasPermission("deventos." + type.permissao)
 			|| sender.hasPermission("deventos.admin")) {
 
-			EventosManager eventosManager = instance.getEventosManager();
+			EventsManager eventsManager = instance.getEventosManager();
 
-			Evento evento = eventosManager.getEventoByPlayer(sender);
+			Event event = eventsManager.getEventoByPlayer(sender);
 			List<String> removeFrom;
 
-			if (evento != null) {
-				removeFrom = evento.getPlayers();
+			if (event != null) {
+				removeFrom = event.getPlayers();
 			} else {
 
-				evento = eventosManager.getEventoByEspectador(sender);
+				event = eventsManager.getEventoByEspectador(sender);
 
-				if (evento == null) {
+				if (event == null) {
 					sender.sendMessage(
 						instance.getConfig().getString("Mensagem.Erro.Nao_Esta").replace("&", "§"));
 					return true;
 				} else {
-					removeFrom = evento.getEspectadores();
+					removeFrom = event.getEspectadores();
 				}
 
 			}
 
 			try {
-				eventosManager.removePlayerFromEvent(sender.getName(), evento, removeFrom, true);
+				eventsManager.removePlayerFromEvent(sender.getName(), event, removeFrom, true);
 
-				if (evento.getEventoState().equals(EventoState.EMANDAMENTO)) {
-					if (evento.getPlayers().size() == 1 && evento.ultimoEventoGanha())
+				if (event.getEventoState().equals(EventState.EMANDAMENTO)) {
+					if (event.getPlayers().size() == 1 && event.ultimoEventoGanha())
 						try {
-							instance.getEventosStateManager().stopEventoWithWinner(evento,
-								instance.getServer().getPlayer(evento.getPlayers().get(0)));
+							instance.getEventosStateManager().stopEventoWithWinner(event,
+								instance.getServer().getPlayer(event.getPlayers().get(0)));
 						} catch (IOException | InvalidConfigurationException e) {
 							e.printStackTrace();
 						}
-					else if (evento.getPlayers().size() == 0)
-						instance.getEventosStateManager().stopEventoWithoutWinner(evento, EventoStopReason.SEMVENCEDOR);
+					else if (event.getPlayers().size() == 0)
+						instance.getEventosStateManager().stopEventoWithoutWinner(event, EventStopReason.SEMVENCEDOR);
 				}
 			} catch (EventoException e) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Mundo_Invalido")
@@ -69,11 +69,11 @@ public class SubCmdSair extends PlayerSubCommand {
 				return true;
 			}
 
-			DEPlayerQuitEvent quit = new DEPlayerQuitEvent((Player) sender, evento, QuitReason.NATURAL);
+			DEPlayerQuitEvent quit = new DEPlayerQuitEvent((Player) sender, event, QuitReason.NATURAL);
 			instance.getServer().getPluginManager().callEvent(quit);
 
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Saiu").replace("&", "§")
-				.replace("{evento}", evento.getNome()));
+				.replace("{evento}", event.getNome()));
 		} else {
 			sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Sem_Permissao_Sair").replace("&", "§"));
 			return true;

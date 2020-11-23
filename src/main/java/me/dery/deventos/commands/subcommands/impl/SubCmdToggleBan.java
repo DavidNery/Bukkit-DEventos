@@ -2,6 +2,7 @@ package me.dery.deventos.commands.subcommands.impl;
 
 import java.io.IOException;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -9,8 +10,7 @@ import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.SubCommand;
 import me.dery.deventos.enums.others.BanAction;
 import me.dery.deventos.enums.subcommands.SubCommands;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 
 public class SubCmdToggleBan extends SubCommand {
 
@@ -33,11 +33,11 @@ public class SubCmdToggleBan extends SubCommand {
 				return true;
 			}
 
-			EventosManager eventosManager = instance.getEventosManager();
+			EventsManager eventsManager = instance.getEventosManager();
 
-			Evento evento = eventosManager.getEventoByName(args[2]);
+			Event event = eventsManager.getEventoByName(args[2]);
 
-			if (evento == null) {
+			if (event == null) {
 				sender.sendMessage(
 					instance.getConfig().getString(
 						"Mensagem.Erro.Evento_Invalido").replace("&", "§").replace("{evento}", args[2]));
@@ -52,20 +52,20 @@ public class SubCmdToggleBan extends SubCommand {
 
 			try {
 
-				if (eventosManager.togglePlayerBanStatus(BanAction.valueOf(type.name()), player.getName(), evento))
+				if (eventsManager.togglePlayerBanStatus(BanAction.valueOf(type.name()), player.getName(), event))
 					sender.sendMessage(
 						instance.getConfig().getString("Mensagem.Sucesso." + mensagens[0])
-							.replace("&", "§").replace("{evento}", evento.getNome())
+							.replace("&", "§").replace("{evento}", event.getNome())
 							.replace("{player}", player.getName()));
 				else
 					sender.sendMessage(instance.getConfig().getString("Mensagem.Erro." + mensagens[1])
-						.replace("&", "§").replace("{evento}", evento.getNome())
+						.replace("&", "§").replace("{evento}", event.getNome())
 						.replace("{player}", player.getName()));
 
 			} catch (IOException e) {
 				sender.sendMessage(
 					instance.getConfig().getString("Mensagem.Erro." + mensagens[2]).replace("&", "§")
-						.replace("{evento}", evento.getNome())
+						.replace("{evento}", event.getNome())
 						.replace("{player}", player.getName()));
 				return true;
 			}

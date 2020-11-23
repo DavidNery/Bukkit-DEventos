@@ -19,13 +19,13 @@ import me.dery.deventos.listeners.eventslisteners.required.CommandsListener;
 import me.dery.deventos.listeners.eventslisteners.required.DropListener;
 import me.dery.deventos.listeners.eventslisteners.required.EspectadorDamageListener;
 import me.dery.deventos.listeners.eventslisteners.required.VictoryListener;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.objects.Event;
 
 public class ListenersManager {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
 	private final RunnableManager runnableManager;
 
@@ -35,21 +35,21 @@ public class ListenersManager {
 
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
+		eventsManager = instance.getEventosManager();
 		runnableManager = instance.getRunnableManager();
 
 		registeredListeners = new ArrayList<>();
 
 	}
 
-	public void registerListeners(Evento evento) {
+	public void registerListeners(Event event) {
 
 		PluginManager pluginManager = instance.getServer().getPluginManager();
 
-		List<Listener> listenersToRegister = getListenerToManipulate(evento);
+		List<Listener> listenersToRegister = getListenerToManipulate(event);
 
 		// O método é chamado antes de adicionar o evento na lista
-		if (eventosManager.getEmAndamento().size() == 0) {
+		if (eventsManager.getEmAndamento().size() == 0) {
 			listenersToRegister.addAll(Arrays.asList(new BuildListener(instance), new CommandsListener(instance),
 				new DropListener(instance), new EspectadorDamageListener(instance), new VictoryListener(instance)));
 
@@ -60,24 +60,24 @@ public class ListenersManager {
 		if (listenersToRegister.size() > 0)
 			registerListener(pluginManager, listenersToRegister);
 
-		if (evento.getBlock() != null)
-			runnableManager.registerBlockTask(instance, instance.getEventosStateManager(), evento);
+		if (event.getBlock() != null)
+			runnableManager.registerBlockTask(instance, instance.getEventosStateManager(), event);
 	}
 
-	public void unregisterListeners(Evento evento) {
+	public void unregisterListeners(Event event) {
 
 		// O método é chamado depois de remover o evento da lista
-		if (eventosManager.getEmAndamento().size() == 0) {
+		if (eventsManager.getEmAndamento().size() == 0) {
 			unregisterListener(instance.getServer().getPluginManager(), registeredListeners);
 		} else {
-			List<Listener> listenersToUnregister = getListenerToManipulate(evento);
+			List<Listener> listenersToUnregister = getListenerToManipulate(event);
 
 			if (listenersToUnregister.size() > 0)
 				unregisterListener(instance.getServer().getPluginManager(), listenersToUnregister);
 		}
 
-		if (evento.getBlock() != null)
-			runnableManager.unregisterBlockTask(evento);
+		if (event.getBlock() != null)
+			runnableManager.unregisterBlockTask(event);
 
 	}
 
@@ -95,10 +95,10 @@ public class ListenersManager {
 		}
 	}
 
-	private List<Listener> getListenerToManipulate(Evento evento) {
+	private List<Listener> getListenerToManipulate(Event event) {
 		boolean damageListener = false, pvpListener = false, foodListener = false;
 
-		for (Evento e : eventosManager.getEmAndamento()) {
+		for (Event e : eventsManager.getEmAndamento()) {
 			if (e.desativarDamage())
 				damageListener = true;
 			if (e.desativarFome())
@@ -109,11 +109,11 @@ public class ListenersManager {
 
 		List<Listener> listeners = new ArrayList<>();
 
-		if (evento.desativarDamage() && !damageListener)
+		if (event.desativarDamage() && !damageListener)
 			listeners.add(new DamageListener(instance));
-		if (evento.desativarPvp() && !pvpListener)
+		if (event.desativarPvp() && !pvpListener)
 			listeners.add(new PVPListener(instance));
-		if (evento.desativarFome() && !foodListener)
+		if (event.desativarFome() && !foodListener)
 			listeners.add(new FoodListener(instance));
 
 		return listeners;

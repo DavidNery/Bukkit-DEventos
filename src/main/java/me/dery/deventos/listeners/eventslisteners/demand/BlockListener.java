@@ -9,21 +9,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.enums.eventos.EventoState;
+import me.dery.deventos.enums.eventos.EventState;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.managers.EventosStateManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.managers.EventsStateManager;
+import me.dery.deventos.objects.Event;
 
 public class BlockListener implements Listener {
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
-	private final EventosStateManager eventosStateManager;
+	private final EventsStateManager eventsStateManager;
 
 	public BlockListener(DEventos instance) {
-		eventosManager = instance.getEventosManager();
-		eventosStateManager = instance.getEventosStateManager();
+		eventsManager = instance.getEventosManager();
+		eventsStateManager = instance.getEventosStateManager();
 	}
 
 	@EventHandler
@@ -34,13 +34,13 @@ public class BlockListener implements Listener {
 		if (e.getFrom().getX() != e.getTo().getX() || e.getFrom().getY() != e.getTo().getY()
 			|| e.getFrom().getZ() != e.getTo().getZ()) {
 
-			for (Evento evento : eventosManager.getEmAndamento()) {
-				if (evento.getBlock() != null
-					&& player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == evento.getBlock()
-					&& evento.getEventoState() == EventoState.EMANDAMENTO
-					&& evento.getPlayers().contains(player.getName())) {
+			for (Event event : eventsManager.getEmAndamento()) {
+				if (event.getBlock() != null
+					&& player.getLocation().clone().subtract(0, 1, 0).getBlock().getType() == event.getBlock()
+					&& event.getEventoState() == EventState.EMANDAMENTO
+					&& event.getPlayers().contains(player.getName())) {
 					try {
-						eventosStateManager.stopEventoWithWinner(evento, player);
+						eventsStateManager.stopEventoWithWinner(event, player);
 					} catch (IOException | InvalidConfigurationException | EventoException e1) {
 						e1.printStackTrace();
 					}

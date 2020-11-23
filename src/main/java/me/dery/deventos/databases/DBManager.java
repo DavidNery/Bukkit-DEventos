@@ -20,15 +20,15 @@ public class DBManager {
 	private long lastupdate;
 
 	private LinkedHashSet<DPlayer> dplayers;
-	private LinkedHashMap<String, Integer> topvitorias, topderrotas, topparticipacoes;
+	private LinkedHashMap<String, Integer> topwins, toploses, topparticipations;
 
 	public DBManager(DEventos instance) throws IOException {
 
 		this.instance = instance;
 
-		topvitorias = new LinkedHashMap<>();
-		topderrotas = new LinkedHashMap<>();
-		topparticipacoes = new LinkedHashMap<>();
+		topwins = new LinkedHashMap<>();
+		toploses = new LinkedHashMap<>();
+		topparticipations = new LinkedHashMap<>();
 		dplayers = new LinkedHashSet<>();
 
 		if (instance.getConfig().getBoolean("Config.MySQL.Use"))
@@ -78,8 +78,8 @@ public class DBManager {
 		database.prepareAddNew();
 		for (DPlayer dplayer : dplayers)
 			database.addNew(
-							dplayer.getPlayer(), dplayer.getVitorias(), dplayer.getDerrotas(),
-							dplayer.getParticipacoes()
+							dplayer.getPlayer(), dplayer.getWins(), dplayer.getLoses(),
+							dplayer.getParticipations()
 			);
 		database.execute();
 
@@ -87,13 +87,13 @@ public class DBManager {
 
 	public void downloadFromDataBase() throws ClassNotFoundException, SQLException {
 
-		topvitorias = database.getTOPVitorias(
+		topwins = database.getTOPWins(
 						instance.getConfig().getInt("Config.Rank.Vitorias_Quantidade")
 		);
-		topderrotas = database.getTOPDerrotas(
+		toploses = database.getTOPLoses(
 						instance.getConfig().getInt("Config.Rank.Derrotas_Quantidade")
 		);
-		topparticipacoes = database.getTOPParticipacoes(
+		topparticipations = database.geTOPParticipations(
 						instance.getConfig().getInt("Config.Rank.Participacoes_Quantidade")
 		);
 
@@ -116,9 +116,9 @@ public class DBManager {
 		for (DPlayer dplayer : dplayers) {
 
 			if (dplayer.getPlayer().equalsIgnoreCase(player)) {
-				dplayer.setVitorias(dplayer.getVitorias() + vitorias);
-				dplayer.setParticipacoes(dplayer.getParticipacoes() + participacoes);
-				dplayer.setDerrotas(dplayer.getDerrotas() + derrotas);
+				dplayer.setWins(dplayer.getWins() + vitorias);
+				dplayer.setParticipations(dplayer.getParticipations() + participacoes);
+				dplayer.setLoses(dplayer.getLoses() + derrotas);
 				return;
 			}
 
@@ -129,11 +129,11 @@ public class DBManager {
 
 	}
 
-	public LinkedHashMap<String, Integer> getTopVitorias() { return topvitorias; }
+	public LinkedHashMap<String, Integer> getTopWins() { return topwins; }
 
-	public LinkedHashMap<String, Integer> getTopDerrotas() { return topderrotas; }
+	public LinkedHashMap<String, Integer> getTopLoses() { return toploses; }
 
-	public LinkedHashMap<String, Integer> getTopParticipacoes() { return topparticipacoes; }
+	public LinkedHashMap<String, Integer> getTopParticipations() { return topparticipations; }
 
 	public void setLastUpdate(long lastupdate) { this.lastupdate = lastupdate; }
 

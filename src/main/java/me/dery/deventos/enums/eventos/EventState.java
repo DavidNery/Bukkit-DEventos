@@ -1,6 +1,6 @@
 package me.dery.deventos.enums.eventos;
 
-public enum EventoState {
+public enum EventState {
 
 	/**
 	 * Quando o evento está fechado

@@ -11,11 +11,11 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.enums.eventos.EventoState;
-import me.dery.deventos.enums.eventos.EventoStopReason;
+import me.dery.deventos.enums.eventos.EventState;
+import me.dery.deventos.enums.eventos.EventStopReason;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 import me.dery.deventos.pluginlisteners.DEPlayerQuitEvent;
 import me.dery.deventos.pluginlisteners.DEPlayerQuitEvent.QuitReason;
 
@@ -23,12 +23,12 @@ public class VictoryListener implements Listener {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
 	public VictoryListener(DEventos instance) {
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
+		eventsManager = instance.getEventosManager();
 	}
 
 	@EventHandler
@@ -36,43 +36,43 @@ public class VictoryListener implements Listener {
 
 		Player player = e.getPlayer();
 
-		for (Evento evento : eventosManager.getEmAndamento()) {
-			if (evento.getPlayers().contains(player.getName())) {
+		for (Event event : eventsManager.getEmAndamento()) {
+			if (event.getPlayers().contains(player.getName())) {
 
 				try {
-					DEPlayerQuitEvent quit = new DEPlayerQuitEvent(player, evento, QuitReason.QUIT);
+					DEPlayerQuitEvent quit = new DEPlayerQuitEvent(player, event, QuitReason.QUIT);
 					instance.getServer().getPluginManager().callEvent(quit);
 
-					eventosManager.removePlayerFromEvent(player.getName(), evento, evento.getPlayers(), true);
+					eventsManager.removePlayerFromEvent(player.getName(), event, event.getPlayers(), true);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
 
-				if (evento.getEventoState().equals(EventoState.EMANDAMENTO)) {
-					int size = evento.getPlayers().size();
+				if (event.getEventoState().equals(EventState.EMANDAMENTO)) {
+					int size = event.getPlayers().size();
 
 					try {
-						if (size == 1 && evento.ultimoEventoGanha())
-							instance.getEventosStateManager().stopEventoWithWinner(evento,
-								instance.getServer().getPlayer(evento.getPlayers().get(0)));
+						if (size == 1 && event.ultimoEventoGanha())
+							instance.getEventosStateManager().stopEventoWithWinner(event,
+								instance.getServer().getPlayer(event.getPlayers().get(0)));
 						else if (size == 0)
-							instance.getEventosStateManager().stopEventoWithoutWinner(evento,
-								EventoStopReason.SEMVENCEDOR);
+							instance.getEventosStateManager().stopEventoWithoutWinner(event,
+								EventStopReason.SEMVENCEDOR);
 					} catch (IOException | InvalidConfigurationException | EventoException e1) {
 						e1.printStackTrace();
 					}
 				}
 
-				for (String players : evento.getPlayers())
+				for (String players : event.getPlayers())
 					instance.getServer().getPlayer(players)
 						.sendMessage(instance.getConfig().getString("Mensagem.Player_Desconectou")
 							.replace("&", "§").replace("{player}", player.getName()));
 
 				break;
-			} else if (evento.getEspectadores().contains(player.getName())) {
+			} else if (event.getEspectadores().contains(player.getName())) {
 
 				try {
-					eventosManager.removePlayerFromEvent(player.getName(), evento, evento.getEspectadores(), true);
+					eventsManager.removePlayerFromEvent(player.getName(), event, event.getEspectadores(), true);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
@@ -88,43 +88,43 @@ public class VictoryListener implements Listener {
 
 		Player player = e.getPlayer();
 
-		for (Evento evento : eventosManager.getEmAndamento()) {
-			if (evento.getPlayers().contains(player.getName())) {
+		for (Event event : eventsManager.getEmAndamento()) {
+			if (event.getPlayers().contains(player.getName())) {
 
 				try {
-					DEPlayerQuitEvent quit = new DEPlayerQuitEvent(player, evento, QuitReason.KICK);
+					DEPlayerQuitEvent quit = new DEPlayerQuitEvent(player, event, QuitReason.KICK);
 					instance.getServer().getPluginManager().callEvent(quit);
 
-					eventosManager.removePlayerFromEvent(player.getName(), evento, evento.getPlayers(), true);
+					eventsManager.removePlayerFromEvent(player.getName(), event, event.getPlayers(), true);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
 
-				if (evento.getEventoState().equals(EventoState.EMANDAMENTO)) {
-					int size = evento.getPlayers().size();
+				if (event.getEventoState().equals(EventState.EMANDAMENTO)) {
+					int size = event.getPlayers().size();
 
 					try {
-						if (size == 1 && evento.ultimoEventoGanha())
-							instance.getEventosStateManager().stopEventoWithWinner(evento,
-								instance.getServer().getPlayer(evento.getPlayers().get(0)));
+						if (size == 1 && event.ultimoEventoGanha())
+							instance.getEventosStateManager().stopEventoWithWinner(event,
+								instance.getServer().getPlayer(event.getPlayers().get(0)));
 						else if (size == 0)
-							instance.getEventosStateManager().stopEventoWithoutWinner(evento,
-								EventoStopReason.SEMVENCEDOR);
+							instance.getEventosStateManager().stopEventoWithoutWinner(event,
+								EventStopReason.SEMVENCEDOR);
 					} catch (IOException | InvalidConfigurationException | EventoException e1) {
 						e1.printStackTrace();
 					}
 				}
 
-				for (String players : evento.getPlayers())
+				for (String players : event.getPlayers())
 					instance.getServer().getPlayer(players)
 						.sendMessage(instance.getConfig().getString("Mensagem.Player_Desconectou")
 							.replace("&", "§").replace("{player}", player.getName()));
 
 				break;
-			} else if (evento.getEspectadores().contains(player.getName())) {
+			} else if (event.getEspectadores().contains(player.getName())) {
 
 				try {
-					eventosManager.removePlayerFromEvent(player.getName(), evento, evento.getEspectadores(), true);
+					eventsManager.removePlayerFromEvent(player.getName(), event, event.getEspectadores(), true);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
@@ -140,55 +140,55 @@ public class VictoryListener implements Listener {
 
 		Player player = e.getEntity();
 
-		for (Evento evento : eventosManager.getEmAndamento()) {
-			if (evento.getPlayers().contains(player.getName())) {
+		for (Event event : eventsManager.getEmAndamento()) {
+			if (event.getPlayers().contains(player.getName())) {
 
 				try {
-					DEPlayerQuitEvent quit = new DEPlayerQuitEvent(player, evento, QuitReason.DEATH);
+					DEPlayerQuitEvent quit = new DEPlayerQuitEvent(player, event, QuitReason.DEATH);
 					instance.getServer().getPluginManager().callEvent(quit);
 
-					eventosManager.removePlayerFromEvent(player.getName(), evento, evento.getPlayers(), false);
+					eventsManager.removePlayerFromEvent(player.getName(), event, event.getPlayers(), false);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
 
-				if (evento.getEventoState().equals(EventoState.EMANDAMENTO)) {
-					int size = evento.getPlayers().size();
+				if (event.getEventoState().equals(EventState.EMANDAMENTO)) {
+					int size = event.getPlayers().size();
 
 					try {
-						if (size == 1 && evento.ultimoVivoGanha()) {
-							instance.getEventosStateManager().stopEventoWithWinner(evento,
-								instance.getServer().getPlayer(evento.getPlayers().get(0)));
-							evento.getRespawn().add(player.getName());
+						if (size == 1 && event.ultimoVivoGanha()) {
+							instance.getEventosStateManager().stopEventoWithWinner(event,
+								instance.getServer().getPlayer(event.getPlayers().get(0)));
+							event.getRespawn().add(player.getName());
 						} else if (size == 0) {
-							instance.getEventosStateManager().stopEventoWithoutWinner(evento,
-								EventoStopReason.SEMVENCEDOR);
-							evento.getRespawn().add(player.getName());
-						} else if (size >= 2 && evento.ativarEspectador()) {
-							evento.getEspectadores().add(player.getName());
+							instance.getEventosStateManager().stopEventoWithoutWinner(event,
+								EventStopReason.SEMVENCEDOR);
+							event.getRespawn().add(player.getName());
+						} else if (size >= 2 && event.ativarEspectador()) {
+							event.getEspectadores().add(player.getName());
 						} else {
-							evento.getRespawn().add(player.getName());
+							event.getRespawn().add(player.getName());
 						}
 					} catch (IOException | InvalidConfigurationException | EventoException e1) {
 						e1.printStackTrace();
 					}
 				}
 
-				for (String players : evento.getPlayers())
+				for (String players : event.getPlayers())
 					instance.getServer().getPlayer(players)
 						.sendMessage(instance.getConfig().getString("Mensagem.Player_Morreu")
 							.replace("&", "§").replace("{player}", player.getName()));
 				break;
-			} else if (evento.getEspectadores().contains(player.getName())) {
+			} else if (event.getEspectadores().contains(player.getName())) {
 
 				e.getDrops().clear();
 				try {
-					eventosManager.removePlayerFromEvent(player.getName(), evento, evento.getEspectadores(), false);
+					eventsManager.removePlayerFromEvent(player.getName(), event, event.getEspectadores(), false);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
 
-				evento.getRespawn().add(player.getName());
+				event.getRespawn().add(player.getName());
 				break;
 			}
 		}

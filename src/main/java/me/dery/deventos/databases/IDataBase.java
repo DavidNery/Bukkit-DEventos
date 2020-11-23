@@ -16,18 +16,18 @@ public interface IDataBase {
 	
 	public void prepareAddNew() throws ClassNotFoundException, SQLException;
 
-	public void addNew(String player, int vitorias, int derrotas, int participacoes)
+	public void addNew(String player, int wins, int loses, int participations)
 					throws ClassNotFoundException, SQLException;
 	
 	public void execute() throws ClassNotFoundException, SQLException;
 
-	public LinkedHashMap<String, Integer> getTOPVitorias(int quantidade)
+	public LinkedHashMap<String, Integer> getTOPWins(int amount)
 					throws ClassNotFoundException, SQLException;
 
-	public LinkedHashMap<String, Integer> getTOPParticipacoes(int quantidade)
+	public LinkedHashMap<String, Integer> geTOPParticipations(int amount)
 					throws ClassNotFoundException, SQLException;
 
-	public LinkedHashMap<String, Integer> getTOPDerrotas(int quantidade)
+	public LinkedHashMap<String, Integer> getTOPLoses(int amount)
 					throws ClassNotFoundException, SQLException;
 
 	public LinkedHashSet<DPlayer> getPlayers() throws ClassNotFoundException, SQLException;

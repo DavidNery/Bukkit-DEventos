@@ -2,6 +2,7 @@ package me.dery.deventos.listeners;
 
 import java.io.IOException;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
@@ -18,25 +19,24 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.enums.eventos.EventoState;
+import me.dery.deventos.enums.eventos.EventState;
 import me.dery.deventos.exceptions.EventoException;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.managers.EventosStateManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.managers.EventsStateManager;
 
 public class MainListeners implements Listener {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
-	private final EventosStateManager eventosStateManager;
+	private final EventsStateManager eventsStateManager;
 
 	public MainListeners(DEventos instance) {
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
-		eventosStateManager = instance.getEventosStateManager();
+		eventsManager = instance.getEventosManager();
+		eventsStateManager = instance.getEventosStateManager();
 
 		instance.getServer().getPluginManager().registerEvents(this, instance);
 	}
@@ -45,13 +45,13 @@ public class MainListeners implements Listener {
 	public void respawn(PlayerRespawnEvent e) {
 		Player p = e.getPlayer();
 
-		for (Evento eventos : eventosManager.getEmAndamento()) {
+		for (Event eventos : eventsManager.getEmAndamento()) {
 			if (eventos.ativarEspectador()) {
 				if (eventos.getEspectadores().contains(p.getName())) {
 					new BukkitRunnable() {
 						public void run() {
 							try {
-								eventosManager.addPlayerInEspectadorEvent(p, eventos, false);
+								eventsManager.addPlayerInEspectadorEvent(p, eventos, false);
 							} catch (EventoException e) {
 								e.printStackTrace();
 							}
@@ -64,7 +64,7 @@ public class MainListeners implements Listener {
 			}
 		}
 
-		for (Evento eventos : eventosManager.getLoadedEventos()) {
+		for (Event eventos : eventsManager.getLoadedEventos()) {
 			if (eventos.getRespawn().contains(p.getName())) {
 				e.setRespawnLocation(instance.getLocationUtils().deserializeLocation(eventos.getExit()));
 				eventos.getRespawn().remove(p.getName());
@@ -79,15 +79,15 @@ public class MainListeners implements Listener {
 		if (e.getLine(0).equalsIgnoreCase("[Evento]") && !e.getLine(1).isEmpty()) {
 			Player p = e.getPlayer();
 			if (p.hasPermission("deventos.placa")) {
-				Evento evento = eventosManager.getEventoByName(e.getLine(1));
-				if (evento == null) {
+				Event event = eventsManager.getEventoByName(e.getLine(1));
+				if (event == null) {
 					e.getBlock().breakNaturally();
 					p.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido").replace("&", "§")
 						.replace("{evento}", e.getLine(1)));
 					return;
 				}
 				e.setLine(0, "§3§l[Evento]");
-				e.setLine(1, "§f§l" + evento.getNome());
+				e.setLine(1, "§f§l" + event.getNome());
 				e.setLine(2, "§0§l------");
 			} else {
 				e.getBlock().breakNaturally();
@@ -108,9 +108,9 @@ public class MainListeners implements Listener {
 
 				e.setCancelled(true);
 
-				Evento evento = eventosManager.getEventoByEspectador(p);
+				Event event = eventsManager.getEventoByEspectador(p);
 
-				if (evento == null) {
+				if (event == null) {
 					p.setItemInHand(null);
 					if (p.getInventory().getHelmet() != null
 						&& p.getInventory().getHelmet().getType() == Material.SKULL_ITEM)
@@ -120,10 +120,10 @@ public class MainListeners implements Listener {
 				}
 
 				p.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Saiu").replace("&", "§")
-					.replace("{evento}", evento.getNome()));
+					.replace("{evento}", event.getNome()));
 
 				try {
-					eventosManager.removePlayerFromEvent(p.getName(), evento, evento.getEspectadores(), true);
+					eventsManager.removePlayerFromEvent(p.getName(), event, event.getEspectadores(), true);
 				} catch (EventoException e1) {
 					e1.printStackTrace();
 				}
@@ -138,23 +138,23 @@ public class MainListeners implements Listener {
 
 					e.setCancelled(true);
 
-					Evento evento = eventosManager.getEventoByPlayer(p);
+					Event event = eventsManager.getEventoByPlayer(p);
 
-					if (evento != null) {
-						if (!evento.getNome().equalsIgnoreCase(sign.getLine(1).replace("§f§l", ""))) {
+					if (event != null) {
+						if (!event.getNome().equalsIgnoreCase(sign.getLine(1).replace("§f§l", ""))) {
 
 							p.sendMessage(instance.getConfig().getString("Mensagem.Erro.Nao_Esta_Evento")
 								.replace("&", "§"));
 
-						} else if (evento.getEventoState() != EventoState.EMANDAMENTO) {
+						} else if (event.getEventoState() != EventState.EMANDAMENTO) {
 
 							p.sendMessage(instance.getConfig().getString("Mensagem.Erro.Nao_Ocorrendo")
 								.replace("&", "§"));
 
-						} else if (evento.getBlock() != null) {
+						} else if (event.getBlock() != null) {
 
 							p.sendMessage(instance.getConfig().getString("Mensagem.Erro.Passar_Bloco")
-								.replace("{bloco}", evento.getBlock().name()).replace("&", "§"));
+								.replace("{bloco}", event.getBlock().name()).replace("&", "§"));
 
 						} else {
 
@@ -162,7 +162,7 @@ public class MainListeners implements Listener {
 							sign.update();
 
 							try {
-								eventosStateManager.stopEventoWithWinner(evento, p);
+								eventsStateManager.stopEventoWithWinner(event, p);
 							} catch (IOException | InvalidConfigurationException | EventoException e1) {
 								e1.printStackTrace();
 							}

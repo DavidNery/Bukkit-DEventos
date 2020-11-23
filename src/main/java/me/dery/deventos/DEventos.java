@@ -10,14 +10,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import me.dery.deventos.commands.ComandoEvento;
-import me.dery.deventos.commands.ComandoEventos;
+import me.dery.deventos.commands.CommandEvent;
+import me.dery.deventos.commands.CommandEvents;
 import me.dery.deventos.databases.DBManager;
 import me.dery.deventos.integrations.SimpleClansAPI;
 import me.dery.deventos.listeners.LegendChat;
 import me.dery.deventos.listeners.MainListeners;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.managers.EventosStateManager;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.managers.EventsStateManager;
 import me.dery.deventos.managers.ListenersManager;
 import me.dery.deventos.managers.RunnableManager;
 import me.dery.deventos.runnables.CheckStart;
@@ -38,13 +38,13 @@ public class DEventos extends JavaPlugin {
 
 	private DBManager dbManager;
 
-	private EventosManager eventosManager;
+	private EventsManager eventsManager;
 
 	private RunnableManager runnableManager;
 
 	private ListenersManager listenersManager;
 
-	private EventosStateManager eventosStateManager;
+	private EventsStateManager eventsStateManager;
 
 	private InventoryUtils inventoryUtils;
 
@@ -70,8 +70,8 @@ public class DEventos extends JavaPlugin {
 				saveDefaultConfig();
 				getServer().getConsoleSender().sendMessage(" §3Config: §bCriada");
 
-				if (!new File(getDataFolder(), "eventos/parkour.yml").exists())
-					saveResource("eventos/parkour.yml", false);
+				if (!new File(getDataFolder(), "events/parkour.yml").exists())
+					saveResource("events/parkour.yml", false);
 			} else {
 				getServer().getConsoleSender().sendMessage(" §3Config: §bJa Existente");
 			}
@@ -89,15 +89,15 @@ public class DEventos extends JavaPlugin {
 				e.printStackTrace();
 			}
 
-			eventosManager = new EventosManager(this);
+			eventsManager = new EventsManager(this);
 			runnableManager = new RunnableManager();
 			listenersManager = new ListenersManager(this);
-			eventosStateManager = new EventosStateManager(this);
+			eventsStateManager = new EventsStateManager(this);
 
 			new MainListeners(this);
 
-			new ComandoEvento(this);
-			new ComandoEventos(this);
+			new CommandEvent(this);
+			new CommandEvents(this);
 
 			if (getConfig().getBoolean("Config.Auto_Start.Ativar"))
 				checkStart = new CheckStart(this).runTaskTimerAsynchronously(this, 0, 60 * 20);
@@ -118,7 +118,7 @@ public class DEventos extends JavaPlugin {
 					getServer().getConsoleSender().sendMessage(" §3Legendchat: §bNao Encontrado");
 				} else {
 					getServer().getConsoleSender().sendMessage(" §3Legendchat: §bHooked (Tag)");
-					Bukkit.getServer().getPluginManager().registerEvents(new LegendChat(eventosManager), this);
+					Bukkit.getServer().getPluginManager().registerEvents(new LegendChat(eventsManager), this);
 				}
 			} else {
 				getServer().getConsoleSender().sendMessage(" §3Legendchat: §bNao usar");
@@ -174,13 +174,13 @@ public class DEventos extends JavaPlugin {
 
 	public DBManager getDBManager() { return dbManager; }
 
-	public EventosManager getEventosManager() { return eventosManager; }
+	public EventsManager getEventosManager() { return eventsManager; }
 
 	public ListenersManager getListenersManager() { return listenersManager; }
 	
 	public RunnableManager getRunnableManager() { return runnableManager; }
 
-	public EventosStateManager getEventosStateManager() { return eventosStateManager; }
+	public EventsStateManager getEventosStateManager() { return eventsStateManager; }
 
 	public InventoryUtils getInventoryUtils() { return inventoryUtils; }
 

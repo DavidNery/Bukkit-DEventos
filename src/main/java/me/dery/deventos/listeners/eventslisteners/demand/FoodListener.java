@@ -6,22 +6,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 
 public class FoodListener implements Listener {
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
-	public FoodListener(DEventos instance) { eventosManager = instance.getEventosManager(); }
+	public FoodListener(DEventos instance) { eventsManager = instance.getEventosManager(); }
 
 	@EventHandler(ignoreCancelled = true)
 	public void foodControl(FoodLevelChangeEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
-			for (Evento evento : eventosManager.getEmAndamento()) {
-				if (evento.desativarFome() &&
-					(evento.getPlayers().contains(p.getName()) || evento.getEspectadores().contains(p.getName()))) {
+			for (Event event : eventsManager.getEmAndamento()) {
+				if (event.desativarFome() &&
+					(event.getPlayers().contains(p.getName()) || event.getEspectadores().contains(p.getName()))) {
 					e.setCancelled(true);
 					break;
 				}

@@ -10,9 +10,9 @@ import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.TopSubCommand;
 import me.dery.deventos.enums.subcommands.SubCommands;
 
-public class SubCmdTopParticipacoes extends TopSubCommand {
+public class SubCmdTopWins extends TopSubCommand {
 
-	public SubCmdTopParticipacoes(SubCommands type) { super(type); }
+	public SubCmdTopWins(SubCommands type) { super(type); }
 
 	@Override
 	public boolean exec(DEventos instance, CommandSender sender, String[] args) {
@@ -20,25 +20,24 @@ public class SubCmdTopParticipacoes extends TopSubCommand {
 		if (sender.hasPermission("deventos.player") || sender.hasPermission("deventos." + type.permissao)
 			|| sender.hasPermission("deventos.admin")) {
 
-			LinkedHashMap<String, Integer> topparticipacoes = instance.getDBManager().getTopParticipacoes();
+			LinkedHashMap<String, Integer> topvitorias = instance.getDBManager().getTopWins();
 
-			if (topparticipacoes == null || topparticipacoes.size() == 0) {
-				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.TOP_Participacoes_Nao_Definido")
+			if (topvitorias == null || topvitorias.size() == 0) {
+				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.TOP_Vitorias_Nao_Definido")
 					.replace("&", "§"));
 				return true;
 			}
 
-			sender
-				.sendMessage(instance.getConfig().getString("Config.Rank.TOP_Participacoes_Titulo").replace("&", "§"));
+			sender.sendMessage(instance.getConfig().getString("Config.Rank.TOP_Vitorias_Titulo").replace("&", "§"));
 
 			int i = 1;
 
-			for (Entry<String, Integer> entry : topparticipacoes.entrySet())
-				sender.sendMessage(instance.getConfig().getString("Config.Rank.TOP_Participacoes_Format")
+			for (Entry<String, Integer> entry : topvitorias.entrySet())
+				sender.sendMessage(instance.getConfig().getString("Config.Rank.TOP_Vitorias_Format")
 					.replace("&", "§").replace("{posicao}", (i++) + "")
-					.replace("{player}", entry.getKey()).replace("{participacoes}", entry.getValue() + ""));
+					.replace("{player}", entry.getKey()).replace("{vitorias}", entry.getValue() + ""));
 
-			sender.sendMessage(instance.getConfig().getString("Config.Rank.TOP_Participacoes_Fechamento")
+			sender.sendMessage(instance.getConfig().getString("Config.Rank.TOP_Vitorias_Fechamento")
 				.replace("&", "§")
 				.replace("{ultimaatualizacao}", sdf.format(new Date(instance.getDBManager().getLastUpdate()))));
 		} else {

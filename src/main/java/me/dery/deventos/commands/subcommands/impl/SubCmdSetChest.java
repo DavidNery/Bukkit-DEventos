@@ -2,6 +2,7 @@ package me.dery.deventos.commands.subcommands.impl;
 
 import java.io.IOException;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -9,10 +10,9 @@ import org.bukkit.entity.Player;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.PlayerSubCommand;
-import me.dery.deventos.enums.eventos.EventoProperty;
+import me.dery.deventos.enums.events.EventProperty;
 import me.dery.deventos.enums.subcommands.SubCommands;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 
 public class SubCmdSetChest extends PlayerSubCommand {
 
@@ -28,18 +28,18 @@ public class SubCmdSetChest extends PlayerSubCommand {
 				return true;
 			}
 
-			EventosManager eventosManager = instance.getEventosManager();
+			EventsManager eventsManager = instance.getEventosManager();
 
-			Evento evento = eventosManager.getEventoByName(args[1]);
+			Event event = eventsManager.getEventoByName(args[1]);
 
-			if (evento == null) {
+			if (event == null) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido")
 					.replace("&", "§").replace("{evento}", args[1]));
 				return true;
 			}
 
-			FileConfiguration config = eventosManager.getEventoConfig(evento);
-			ConfigurationSection bausSection = config.getConfigurationSection(EventoProperty.BAUS.keyInConfig);
+			FileConfiguration config = eventsManager.getEventoConfig(event);
+			ConfigurationSection bausSection = config.getConfigurationSection(EventProperty.CHESTS.keyInConfig);
 			int bau;
 			if (bausSection == null)
 				bau = 1;
@@ -49,19 +49,19 @@ public class SubCmdSetChest extends PlayerSubCommand {
 						.replace("Bau_", ""))
 					+ 1;
 
-			config.set(EventoProperty.BAUS.keyInConfig + ".Bau_" + bau + ".Location",
+			config.set(EventProperty.CHESTS.keyInConfig + ".Bau_" + bau + ".Location",
 				instance.getLocationUtils().serializeLocation(((Player) sender).getLocation(), false));
-			config.set(EventoProperty.BAUS.keyInConfig + ".Bau_" + bau + ".Items",
-				eventosManager.getDefaultChestItems());
+			config.set(EventProperty.CHESTS.keyInConfig + ".Bau_" + bau + ".Items",
+				eventsManager.getDefaultChestItems());
 
 			try {
-				config.save(evento.getFileEvento());
+				config.save(event.getFileEvento());
 
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Bau_Setado")
-					.replace("{bau}", bau + "").replace("&", "§").replace("{evento}", evento.getNome()));
+					.replace("{bau}", bau + "").replace("&", "§").replace("{evento}", event.getNome()));
 			} catch (IOException e) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.SetChest")
-					.replace("&", "§").replace("{evento}", evento.getNome()));
+					.replace("&", "§").replace("{evento}", event.getNome()));
 				return true;
 			}
 		} else {

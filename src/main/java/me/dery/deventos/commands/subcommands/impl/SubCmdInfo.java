@@ -1,14 +1,14 @@
 package me.dery.deventos.commands.subcommands.impl;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.SubCommand;
-import me.dery.deventos.enums.eventos.EventoProperty;
+import me.dery.deventos.enums.events.EventProperty;
 import me.dery.deventos.enums.subcommands.SubCommands;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 
 public class SubCmdInfo extends SubCommand {
 
@@ -24,10 +24,10 @@ public class SubCmdInfo extends SubCommand {
 				return true;
 			}
 
-			EventosManager eventosManager = instance.getEventosManager();
-			Evento evento = eventosManager.getEventoByName(args[1]);
+			EventsManager eventsManager = instance.getEventosManager();
+			Event event = eventsManager.getEventoByName(args[1]);
 
-			if (evento == null) {
+			if (event == null) {
 
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido")
 					.replace("&", "§").replace("{evento}", args[1]));
@@ -35,36 +35,36 @@ public class SubCmdInfo extends SubCommand {
 
 			}
 
-			FileConfiguration config = eventosManager.getEventoConfig(evento);
+			FileConfiguration config = eventsManager.getEventoConfig(event);
 
 			String msg = String.join("\n", instance.getConfig().getStringList("Mensagem.Sucesso.Info"))
 				.replace("&", "§")
-				.replace("{evento}", evento.getNome())
-				.replace("{tag}", evento.getTag())
-				.replace("{permissao}", evento.getPermissao())
-				.replace("{permissaobypass}", evento.getPermissaoByPass())
-				.replace("{permissaoespectar}", evento.getPermissaoEspectar())
-				.replace("{premio}", evento.getPremioFormatado())
-				.replace("{players}", evento.getPlayers().size() + "")
-				.replace("{espectadores}", evento.getEspectadores().size() + "")
-				.replace("{desativarpvp}", parseBoolean(evento.desativarPvp()))
-				.replace("{desativardamage}", parseBoolean(evento.desativarDamage()))
-				.replace("{desativarff}", parseBoolean(evento.desativarFF()))
-				.replace("{desativarfome}", parseBoolean(evento.desativarFome()))
-				.replace("{invvazio}", parseBoolean(evento.requireInvVazio()))
-				.replace("{bypassmax}", parseBoolean(evento.byPassMax()))
-				.replace("{ultimovivoganha}", parseBoolean(evento.ultimoVivoGanha()))
-				.replace("{ultimoeventoganha}", parseBoolean(evento.ultimoEventoGanha()))
-				.replace("{salvarinv}", parseBoolean(evento.salvarInv()))
-				.replace("{ativarlobby}", parseBoolean(evento.ativarLobby()))
-				.replace("{ativarespectador}", parseBoolean(evento.ativarEspectador()))
-				.replace("{tempoanuncios}", evento.getTAnuncios() + "")
-				.replace("{anuncios}", config.getInt(EventoProperty.ANUNCIOS.keyInConfig) + "")
-				.replace("{tempoacabar}", evento.getTAcabar() + "")
-				.replace("{minplayers}", evento.getMinPlayers() + "")
-				.replace("{maxplayers}", evento.getMaxPlayers() + "")
+				.replace("{evento}", event.getNome())
+				.replace("{tag}", event.getTag())
+				.replace("{permissao}", event.getPermissao())
+				.replace("{permissaobypass}", event.getPermissaoByPass())
+				.replace("{permissaoespectar}", event.getPermissaoEspectar())
+				.replace("{premio}", event.getPremioFormatado())
+				.replace("{players}", event.getPlayers().size() + "")
+				.replace("{espectadores}", event.getEspectadores().size() + "")
+				.replace("{desativarpvp}", parseBoolean(event.desativarPvp()))
+				.replace("{desativardamage}", parseBoolean(event.desativarDamage()))
+				.replace("{desativarff}", parseBoolean(event.desativarFF()))
+				.replace("{desativarfome}", parseBoolean(event.desativarFome()))
+				.replace("{invvazio}", parseBoolean(event.requireInvVazio()))
+				.replace("{bypassmax}", parseBoolean(event.byPassMax()))
+				.replace("{ultimovivoganha}", parseBoolean(event.ultimoVivoGanha()))
+				.replace("{ultimoeventoganha}", parseBoolean(event.ultimoEventoGanha()))
+				.replace("{salvarinv}", parseBoolean(event.salvarInv()))
+				.replace("{ativarlobby}", parseBoolean(event.ativarLobby()))
+				.replace("{ativarespectador}", parseBoolean(event.ativarEspectador()))
+				.replace("{tempoanuncios}", event.getTAnuncios() + "")
+				.replace("{anuncios}", config.getInt(EventProperty.ANNOUNCEMENTS.keyInConfig) + "")
+				.replace("{tempoacabar}", event.getTAcabar() + "")
+				.replace("{minplayers}", event.getMinPlayers() + "")
+				.replace("{maxplayers}", event.getMaxPlayers() + "")
 				.replace("{ultimovencedor}",
-					evento.getLastWinner().equals("null") ? "ninguém" : evento.getLastWinner());
+					event.getLastWinner().equals("null") ? "ninguém" : event.getLastWinner());
 			
 			sender.sendMessage(msg);
 

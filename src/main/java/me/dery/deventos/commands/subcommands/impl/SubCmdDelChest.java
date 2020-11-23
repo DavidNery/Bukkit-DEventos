@@ -2,14 +2,14 @@ package me.dery.deventos.commands.subcommands.impl;
 
 import java.io.IOException;
 
+import me.dery.deventos.objects.Event;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import me.dery.deventos.DEventos;
 import me.dery.deventos.commands.subcommands.abstracts.SubCommand;
 import me.dery.deventos.enums.subcommands.SubCommands;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
 
 public class SubCmdDelChest extends SubCommand {
 
@@ -25,29 +25,29 @@ public class SubCmdDelChest extends SubCommand {
 				return true;
 			}
 
-			EventosManager eventosManager = instance.getEventosManager();
+			EventsManager eventsManager = instance.getEventosManager();
 
-			Evento evento = eventosManager.getEventoByName(args[1]);
+			Event event = eventsManager.getEventoByName(args[1]);
 
-			if (evento == null) {
+			if (event == null) {
 				sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.Evento_Invalido")
 					.replace("&", "§").replace("{evento}", args[1]));
 				return true;
 			}
 
-			FileConfiguration config = eventosManager.getEventoConfig(evento);
+			FileConfiguration config = eventsManager.getEventoConfig(event);
 
 			if (config.contains("Baus.Bau_" + args[2])) {
 				config.set("Baus.Bau_" + args[2], null);
 
 				try {
-					config.save(evento.getFileEvento());
+					config.save(event.getFileEvento());
 
 					sender.sendMessage(instance.getConfig().getString("Mensagem.Sucesso.Bau_Deletado")
-						.replace("{bau}", args[2]).replace("&", "§").replace("{evento}", evento.getNome()));
+						.replace("{bau}", args[2]).replace("&", "§").replace("{evento}", event.getNome()));
 				} catch (IOException e) {
 					sender.sendMessage(instance.getConfig().getString("Mensagem.Erro.SetChest")
-						.replace("&", "§").replace("{evento}", evento.getNome()));
+						.replace("&", "§").replace("{evento}", event.getNome()));
 					return true;
 				}
 			} else {

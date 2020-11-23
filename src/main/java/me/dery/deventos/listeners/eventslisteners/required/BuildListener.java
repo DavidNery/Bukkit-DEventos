@@ -10,19 +10,19 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 
 import me.dery.deventos.DEventos;
-import me.dery.deventos.managers.EventosManager;
-import me.dery.deventos.objects.Evento;
+import me.dery.deventos.managers.EventsManager;
+import me.dery.deventos.objects.Event;
 
 public class BuildListener implements Listener {
 
 	private final DEventos instance;
 
-	private final EventosManager eventosManager;
+	private final EventsManager eventsManager;
 
 	public BuildListener(DEventos instance) {
 		this.instance = instance;
 
-		eventosManager = instance.getEventosManager();
+		eventsManager = instance.getEventosManager();
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -41,7 +41,7 @@ public class BuildListener implements Listener {
 		if (player.hasPermission("deventos.admin"))
 			return;
 
-		for (Evento evento : eventosManager.getEmAndamento()) {
+		for (Event evento : eventsManager.getEmAndamento()) {
 			if (evento.getPlayers().contains(player.getName()) || evento.getEspectadores().contains(player.getName())) {
 				event.setCancelled(true);
 				player.sendMessage(instance.getConfig().getString("Mensagem.Erro.No_Build").replace("&", "§"));
